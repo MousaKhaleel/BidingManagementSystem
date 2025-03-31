@@ -8,8 +8,10 @@
 
   <ItemGroup>
     <Folder Include="Dtos\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BidingManagementSystem.Domain\BidingManagementSystem.Domain.csproj" />
   </ItemGroup>
 
 </Project>
