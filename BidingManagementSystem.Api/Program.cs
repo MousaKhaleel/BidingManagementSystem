@@ -3,8 +3,11 @@ using BidingManagementSystem.Domain.Models;
 using BidingManagementSystem.Infrastructure.Data;
 using BidingManagementSystem.Infrastructure.Repositories;
 using BidingManagementSystem.Infrastructure.UnitOfWork;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,19 +34,22 @@ builder.Services.AddIdentity<User, IdentityRole>(
 	.AddRoles<IdentityRole>()
 	.AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-	.AddJwtBearer(options =>
+builder.Services.AddAuthentication(options =>
+{
+	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
 	{
-		options.TokenValidationParameters = new TokenValidationParameters
+		options.TokenValidationParameters = new TokenValidationParameters()
 		{
+			ValidateActor = true,
 			ValidateIssuer = true,
 			ValidateAudience = true,
-			ValidateLifetime = true,
+			RequireExpirationTime = true,
 			ValidateIssuerSigningKey = true,
-			ValidIssuer = Configuration["Jwt:Issuer"],
-			ValidAudience = Configuration["Jwt:Audience"],
-			IssuerSigningKey = new SymmetricSecurityKey(
-				Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+			ValidIssuer = builder.Configuration.GetSection("Jwt:Issuer").Value,
+			ValidAudience = builder.Configuration.GetSection("Jwt:Audience").Value,
+			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt:Key").Value))
 		};
 	});
 
@@ -62,6 +68,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

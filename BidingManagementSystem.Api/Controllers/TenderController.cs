@@ -78,12 +78,12 @@ namespace BidingManagementSystem.Api.Controllers
 		}
 
 		//GET /api/tenders/{id} → Get tender details by ID
-		[HttpGet("{id}")]
-		public async Task<IActionResult> GetTenderById(int id)
+		[HttpGet("{tenderId}")]
+		public async Task<IActionResult> GetTenderById(int tenderId)
 		{
 			try
 			{
-				var result = await _tenderService.GetTenderByIdAsync(id);
+				var result = await _tenderService.GetTenderByIdAsync(tenderId);
 
 					return Ok(result);
 			}
@@ -95,8 +95,8 @@ namespace BidingManagementSystem.Api.Controllers
 
 		//PUT /api/tenders/{id} → Update a tender (Procurement officer)
 		[Authorize(Roles = "ProcurementOfficer")]
-		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateTender(int id, [FromBody] TenderDto tenderDto)
+		[HttpPut("{tenderId}")]
+		public async Task<IActionResult> UpdateTender(int tenderId, [FromBody] TenderDto tenderDto)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -104,7 +104,7 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 			try
 			{
-				var result = await _tenderService.UpdateTenderAsync(id, tenderDto);
+				var result = await _tenderService.UpdateTenderAsync(tenderId, tenderDto);
 
 				if (result.Success)
 				{
@@ -122,12 +122,12 @@ namespace BidingManagementSystem.Api.Controllers
 		//DELETE /api/tenders/{id} → Delete a tender (Admin or Procurement officer)
 		[Authorize(Roles = "ProcurementOfficer")]
 
-		[HttpDelete("{id}")]
-		public async Task<IActionResult> DeleteTender(int id)
+		[HttpDelete("{tenderId}")]
+		public async Task<IActionResult> DeleteTender(int tenderId)
 		{
 			try
 			{
-				var result = await _tenderService.DeleteTenderAsync(id);
+				var result = await _tenderService.DeleteTenderAsync(tenderId);
 
 				if (result.Success)
 				{
@@ -143,8 +143,9 @@ namespace BidingManagementSystem.Api.Controllers
 		}
 
 		//POST /api/tenders/{id}/documents → Upload a tender document
-		[HttpPost("{id}/documents")]
-		public async Task<IActionResult> UploadTenderDocument(int id, IFormFile file)
+		[Authorize(Roles = "ProcurementOfficer")]
+		[HttpPost("{tenderId}/documents")]
+		public async Task<IActionResult> UploadTenderDocument(int tenderId, IFormFile file)
 		{
 			if (file == null || file.Length == 0)
 			{
@@ -153,7 +154,7 @@ namespace BidingManagementSystem.Api.Controllers
 
 			try
 			{
-				var result = await _tenderService.UploadTenderDocumentAsync(id, file);
+				var result = await _tenderService.UploadTenderDocumentAsync(tenderId, file);
 
 				if (result.Success)
 				{
@@ -168,13 +169,15 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
+		//TODO: update(replace) doc
+
 		//GET /api/tenders/{id}/ documents → Get tender documents
-		[HttpGet("{id}/documents")]
-		public async Task<IActionResult> GetTenderDocuments(int id)
+		[HttpGet("{tenderId}/documents")]
+		public async Task<IActionResult> GetTenderDocuments(int tenderId)
 		{
 			try
 			{
-				var result = await _tenderService.GetTenderDocumentsAsync(id);
+				var result = await _tenderService.GetTenderDocumentsAsync(tenderId);
 
 					return Ok(result);
 			}
@@ -185,12 +188,13 @@ namespace BidingManagementSystem.Api.Controllers
 		}
 
 		//DELETE /api/tenders/{id}/ documents /{ docId} → Remove a document
-		[HttpDelete("{id}/documents/{docId}")]
-		public async Task<IActionResult> DeleteTenderDocument(int id, int docId)
+		[Authorize(Roles = "ProcurementOfficer")]
+		[HttpDelete("{tenderId}/documents/{docId}")]
+		public async Task<IActionResult> DeleteTenderDocument(int tenderId, int docId)
 		{
 			try
 			{
-				var result = await _tenderService.DeleteTenderDocumentAsync(id, docId);
+				var result = await _tenderService.DeleteTenderDocumentAsync(tenderId, docId);
 
 				if (result.Success)
 				{
