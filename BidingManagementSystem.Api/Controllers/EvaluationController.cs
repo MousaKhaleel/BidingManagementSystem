@@ -21,7 +21,7 @@ namespace BidingManagementSystem.Api.Controllers
 		}
 
 		//POST /api/tenders/{id}/ bids /{ bidId}/ score → Manually score bid
-		[HttpPost("tenders/{id}/bids/{bidId}/score")]
+		[HttpPost("tenders/{tenderId}/bids/{bidId}/score")]
 		public async Task<IActionResult> EvaluateBid(int tenderId, int bidId, EvaluationDto evaluation)
 		{
 			if (!ModelState.IsValid)
@@ -47,12 +47,12 @@ namespace BidingManagementSystem.Api.Controllers
 
 
 		//GET /api/tenders/{id}/ bids /{ bidId}/ score → Get bid score
-		[HttpGet("tenders/{id}/bids/{bidId}/score")]//TODO
-		public IActionResult GetBidScore(int id)
+		[HttpGet("tenders/{id}/bids/{bidId}/score")]
+		public IActionResult GetBidScore(int bidId)//TODO: move to bid(?)
 		{
 			try
 			{
-				var result = _evaluationService.GetBidScore(id);
+				var result = _evaluationService.GetBidScore(bidId);
 
 					return Ok(result);
 			}
@@ -62,9 +62,11 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//Awarding
-		//POST /api/tenders/{id}/ bids /{ bidId}/ award → Select a winning bid
-		[Authorize(Roles = "ProcurementOfficer")]
+		//TODO: Automated scoring system for bid comparisons. an automated scoring based on price 
+
+				//Awarding
+				//POST /api/tenders/{id}/ bids /{ bidId}/ award → Select a winning bid
+				[Authorize(Roles = "ProcurementOfficer")]
 		[HttpPost("tenders/{tenderId}/bids/{bidId}/award")]
 		public async Task<IActionResult> AwardBid(int tenderId, int bidId)
 		{

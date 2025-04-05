@@ -16,12 +16,15 @@ namespace BidingManagementSystem.Domain.Models
 		public int TenderId { get; set; }
 		[Required]
 		public string Title { get; set; }
+		public string? ReferenceNumber { get; set; }
 		[Required]
 		public string Description { get; set; }
 		public DateTime IssueDate { get; set; }
-		public DateTime ClosingDate { get; set; }
-		public decimal Budget { get; set; }
+		public DateTime DeadLine { get; set; }
+		public decimal? Budget { get; set; }
 		public Status Status { get; set; } = Status.Open;
+
+		//TODO eligibility criteria.
 
 		public string UserId { get; set; }
 		public User User { get; set; }
@@ -31,5 +34,8 @@ namespace BidingManagementSystem.Domain.Models
 		public List<TenderCategory>? TenderCategories { get; set; }
 		public List<TenderDocument> Documents { get; set; }
 		public List<Bid>? Bids { get; set; }
+
+		public int BidId { get; set; }
+		public Bid? WinnerBid { get; set; }
 	}
 }

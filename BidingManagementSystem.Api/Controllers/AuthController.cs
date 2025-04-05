@@ -48,7 +48,8 @@ namespace BidingManagementSystem.Api.Controllers
 				var result = await _authService.LoginAsync(loginDto);
 				if (result.Success)
 				{
-					return Ok("Login successful");
+					var tokinString = _authService.GenerateJwtTokenString(result.user);
+					return Ok("Login successful, tokin:" + tokinString);
 				}
 				return BadRequest(result.ErrorMessage);
 			}
@@ -105,5 +106,6 @@ namespace BidingManagementSystem.Api.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
+		//TODO reset password
 	}
 }

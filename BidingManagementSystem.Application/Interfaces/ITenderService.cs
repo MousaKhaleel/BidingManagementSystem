@@ -14,12 +14,12 @@ namespace BidingManagementSystem.Application.Interfaces
 		Task<IEnumerable<TenderDto>> GetAllTendersAsync();
 		Task<IEnumerable<TenderDto>> GetOpenTendersAsync();
 		Task<TenderDto> GetTenderByIdAsync(int id);
-		Task<(bool Success, string ErrorMessage)> UpdateTenderAsync(int id, TenderDto tenderDto);
-		Task<(bool Success, string ErrorMessage)> DeleteTenderAsync(int id);
+		Task<(bool Success, string ErrorMessage)> UpdateTenderAsync(int tenderId, TenderDto tenderDto);
+		Task<(bool Success, string ErrorMessage)> DeleteTenderAsync(int tenderId);
 		Task<(bool Success, string ErrorMessage)> GetTendersByCategoryAsync(string category);
-		Task<(bool Success, string ErrorMessage)> UploadTenderDocumentAsync(int id, IFormFile file);
-		Task<TenderDocumentDto> GetTenderDocumentsAsync(int id);
-		Task<(bool Success, string ErrorMessage)> DeleteTenderDocumentAsync(int id, int docId);
+		Task<(bool Success, string ErrorMessage)> UploadTenderDocumentAsync(int tenderId, IFormFile file);
+		Task<TenderDocumentDto> GetTenderDocumentsAsync(int tenderId);
+		Task<(bool Success, string ErrorMessage)> DeleteTenderDocumentAsync(int tenderId, int docId);
 		//Task GetTenderCategoriesAsync();
 	}
 }

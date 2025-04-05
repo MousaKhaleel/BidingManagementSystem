@@ -153,6 +153,8 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
+		//TODO: update(replace) doc
+
 		//GET / api / tenders /{ id}/ bids /{ bidId}/ documents → Get bid documents
 		[Authorize(Roles = "Bidder, ProcurementOfficer")]
 		[HttpGet("tender/{tenderId}/bids/{bidId}/documents")]

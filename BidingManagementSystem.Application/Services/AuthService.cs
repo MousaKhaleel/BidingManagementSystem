@@ -4,9 +4,13 @@ using BidingManagementSystem.Domain.Interfaces;
 using BidingManagementSystem.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,12 +22,14 @@ namespace BidingManagementSystem.Application.Services
 		private readonly UserManager<User> _userManager;
 		private readonly SignInManager<User> _signInManager;
 		private readonly IHttpContextAccessor _httpContextAccessor;
-		public AuthService(IUnitOfWork unitOfWork, UserManager<User> userManager, SignInManager<User> signInManager, IHttpContextAccessor httpContextAccessor)
+		private readonly IConfiguration _configuration;
+		public AuthService(IUnitOfWork unitOfWork, UserManager<User> userManager, SignInManager<User> signInManager, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
 		{
 			_unitOfWork = unitOfWork;
 			_userManager = userManager;
 			_signInManager = signInManager;
 			_httpContextAccessor = httpContextAccessor;
+			_configuration = configuration;
 		}
 
 		public async Task<(bool Success, string ErrorMessage)> ChangePasswordAsync(string password)
@@ -39,6 +45,31 @@ namespace BidingManagementSystem.Application.Services
 			return (true, string.Empty);
 		}
 
+		public async Task<string> GenerateJwtTokenString(User user)
+		{
+			var roles = await _userManager.GetRolesAsync(user);
+			IEnumerable<Claim> claims = new List<Claim>
+	{
+		new Claim(ClaimTypes.Email, user.UserName),
+		new Claim(ClaimTypes.Role, roles.FirstOrDefault()),
+    };
+
+			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt:Key").Value));
+
+			var token = new JwtSecurityToken(
+				claims: claims,
+				expires: DateTime.UtcNow.AddMinutes(600),
+				issuer: _configuration.GetSection("Jwt:Issuer").Value,
+				audience: _configuration.GetSection("Jwt:Audience").Value,
+				signingCredentials: new SigningCredentials(
+					key,
+					SecurityAlgorithms.HmacSha256Signature)
+			);
+
+			string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+			return tokenString;
+		}
+
 		public async Task<User> GetProfileAsync()
 		{
 			var userId = _userManager.GetUserId(_httpContextAccessor.HttpContext.User);
@@ -46,14 +77,15 @@ namespace BidingManagementSystem.Application.Services
 			return result;
 		}
 
-		public async Task<(bool Success, string ErrorMessage)> LoginAsync(LoginDto loginDto)
+		public async Task<(bool Success, string ErrorMessage, User user)> LoginAsync(LoginDto loginDto)
 		{
 			var result = await _signInManager.PasswordSignInAsync(loginDto.UserName, loginDto.Password, false, false);
 			if (!result.Succeeded)
 			{
-				return (false, string.Join(", ", result));
+				return (false, string.Join(", ", result), null);
 			}
-			return (true, string.Empty);
+			var userFind = await _userManager.FindByNameAsync(loginDto.UserName);
+			return (true, string.Empty, userFind);
 		}
 
 		public async Task LogoutAsync()

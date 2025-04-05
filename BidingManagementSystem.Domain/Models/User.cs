@@ -9,8 +9,8 @@ namespace BidingManagementSystem.Domain.Models
 {
 	public class User : IdentityUser
 	{//TODO
-		public Tender? Tender { get; set; }
-		public Bid? Bid { get; set; }
-		public Evaluation? Evaluation { get; set; }
+		public List<Tender>? Tenders { get; set; }
+		public List<Bid>? Bids { get; set; }
+		public List<Evaluation>? Evaluations { get; set; }
 	}
 }

@@ -9,9 +9,9 @@ namespace BidingManagementSystem.Application.Interfaces
 {
 	public interface IEvaluationService
 	{
-		Task<(bool Success, string ErrorMessage)> AwardBidAsync(int id, int bidId);
-		Task<(bool Success, string ErrorMessage)> EvaluateBidAsync(int id, int bidId, EvaluationDto evaluationDto);
-		Task<BidDto> GetAwardedBid(int id);
-		Task<decimal> GetBidScore(int id);
+		Task<(bool Success, string ErrorMessage)> AwardBidAsync(int tenderId, int bidId);
+		Task<(bool Success, string ErrorMessage)> EvaluateBidAsync(int tenderId, int bidId, EvaluationDto evaluationDto);
+		Task<BidDto> GetAwardedBid(int tenderId);
+		Task<decimal> GetBidScore(int bidId);
 	}
 }
