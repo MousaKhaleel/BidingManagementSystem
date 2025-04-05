@@ -19,5 +19,26 @@ namespace BidingManagementSystem.Infrastructure.Repositories
 			_context = dbcontext;
 			_dbSet = dbcontext.Set<T>();
 		}
+		//TODO
+		public async Task AddAsync(T entity)
+		{
+			await _dbSet.AddAsync(entity);
+		}
+
+		public async Task<T> GetByIdAsync(object id)
+		{
+			return await _dbSet.FindAsync(id);
+		}
+
+		public async Task<IEnumerable<T>> GetAllAsync()
+		{
+			return await _dbSet.ToListAsync();
+		}
+
+		public async Task UpdateAsync(T entity)
+		{
+			_dbSet.Update(entity);
+			await _context.SaveChangesAsync();
+		}
 	}
 }

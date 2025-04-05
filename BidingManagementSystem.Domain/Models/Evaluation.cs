@@ -5,19 +5,22 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BidingManagementSystem.Domain.Models.Enums;
 
 namespace BidingManagementSystem.Domain.Models
 {
-	public class TenderDocument
+	public class Evaluation
 	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public int TenderDocumentId { get; set; }
-		public string DocumentName { get; set; }
-		public string DocumentPath { get; set; }
-		public DateTime CreateDate { get; set; }
+		public int EvaluationId { get; set; }
+		public decimal Score { get; set; }
+		public DateTime EvaluationDate { get; set; }
+		public EvaluationCriteria Criteria { get; set; }
 
 		public int TenderId { get; set; }
 		public Tender Tender { get; set; }
+		public string EvaluatorId { get; set; }
+		public User Evaluator { get; set; }
 	}
 }

@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 
 namespace BidingManagementSystem.Domain.Interfaces
 {
-	public interface IUnitOfWork : IDisposable
+	public interface ITenderRepository
 	{
-		ITenderRepository tenderRepository { get; }
-		IBidRepository bidRepository { get; }
-		IGenericRepository<User> userRepository { get; }
-		Task<int> SaveChangesAsync();
+		Task<Tender> GetTenderByIdAsync(int id);
 	}
 }

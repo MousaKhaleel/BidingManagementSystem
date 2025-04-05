@@ -8,16 +8,13 @@ using System.Threading.Tasks;
 
 namespace BidingManagementSystem.Domain.Models
 {
-	public class TenderDocument
+	public class Category
 	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public int TenderDocumentId { get; set; }
-		public string DocumentName { get; set; }
-		public string DocumentPath { get; set; }
-		public DateTime CreateDate { get; set; }
+		public int CategoryId { get; set; }
+		public string Name { get; private set; }
 
-		public int TenderId { get; set; }
-		public Tender Tender { get; set; }
+		public List<TenderCategory>? TenderCategories { get; set; }
 	}
 }

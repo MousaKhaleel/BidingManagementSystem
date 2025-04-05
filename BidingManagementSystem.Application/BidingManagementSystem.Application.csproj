@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\" />
+    <ProjectReference Include="..\BidingManagementSystem.Domain\BidingManagementSystem.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BidingManagementSystem.Domain\BidingManagementSystem.Domain.csproj" />
+    <Folder Include="Commands\" />
+    <Folder Include="Queries\" />
   </ItemGroup>
 
 </Project>

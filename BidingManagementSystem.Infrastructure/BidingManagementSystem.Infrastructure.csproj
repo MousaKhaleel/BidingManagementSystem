@@ -20,4 +20,8 @@
     <ProjectReference Include="..\BidingManagementSystem.Domain\BidingManagementSystem.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Configurations\" />
+  </ItemGroup>
+
 </Project>
