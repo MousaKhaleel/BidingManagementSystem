@@ -12,5 +12,6 @@ namespace BidingManagementSystem.Domain.Interfaces
 		Task<T> GetByIdAsync(object id);
 		Task AddAsync(T entity);
 		Task UpdateAsync(T entity);
+		Task DeleteAsync(T entity);
 	}
 }

@@ -14,14 +14,17 @@ namespace BidingManagementSystem.Domain.Models
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int BidId { get; set; }
+		[Column(TypeName = "decimal(10,2)")]
 		public decimal Amount { get; set; }
 		public DateTime CreateDate { get; set; }
-		public Status Status { get; set; } = Status.UnderReview;
+		public BidStatus Status { get; set; } = BidStatus.UnderReview;
+		[ForeignKey("TenderId")]
 		public int TenderId { get; set; }
 		public Tender Tender { get; set; }
+		[ForeignKey("BidderId")]
 		public string BidderId { get; set; }
 		public User Bidder { get; set; }
-		public List<BidDocument> Documents { get; set; }
+		public List<BidDocument>? Documents { get; set; }
 
 	}
 }

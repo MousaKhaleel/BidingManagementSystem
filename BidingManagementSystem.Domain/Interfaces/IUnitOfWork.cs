@@ -11,7 +11,11 @@ namespace BidingManagementSystem.Domain.Interfaces
 	{
 		ITenderRepository tenderRepository { get; }
 		IBidRepository bidRepository { get; }
+		IEvaluationRepository evaluationRepository { get; }
 		IGenericRepository<User> userRepository { get; }
+		IGenericRepository<Award> awardRepository { get; }
+		IBidDocumentRepository bidDocumentRepository { get; }
+		ITenderDocumentRepository tenderDocumentRepository { get; }
 		Task<int> SaveChangesAsync();
 	}
 }

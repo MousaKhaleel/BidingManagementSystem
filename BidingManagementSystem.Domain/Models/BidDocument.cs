@@ -14,8 +14,10 @@ namespace BidingManagementSystem.Domain.Models
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int BidDocumentId { get; set; }
 		public string DocumentName { get; set; }
+		[Required]
 		public string DocumentPath { get; set; }
 		public DateTime CreateDate { get; set; }
+		[ForeignKey("BidId")]
 		public int BidId { get; set; }
 		public Bid Bid { get; set; }
 	}

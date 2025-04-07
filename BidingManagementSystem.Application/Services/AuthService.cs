@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 namespace BidingManagementSystem.Application.Services
 {
 	public class AuthService : IAuthService
-	{//TODO
+	{//TODO use cqrs
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly UserManager<User> _userManager;
 		private readonly SignInManager<User> _signInManager;

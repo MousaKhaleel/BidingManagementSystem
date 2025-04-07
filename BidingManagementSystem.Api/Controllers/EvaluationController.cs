@@ -1,7 +1,12 @@
-﻿using BidingManagementSystem.Application.Dtos;
+﻿using BidingManagementSystem.Application.Commands.Evaluation.AwardBid;
+using BidingManagementSystem.Application.Commands.Evaluation.EvaluateBid;
+using BidingManagementSystem.Application.Dtos;
 using BidingManagementSystem.Application.Interfaces;
+using BidingManagementSystem.Application.Queries.Evaluation.GetAwardedBidAsync;
+using BidingManagementSystem.Application.Queries.Evaluation.GetBidScoreAsync;
 using BidingManagementSystem.Application.Services;
 using BidingManagementSystem.Domain.Models;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,11 +18,11 @@ namespace BidingManagementSystem.Api.Controllers
 	[ApiController]
 	public class EvaluationController : ControllerBase
 	{
-		private readonly IEvaluationService _evaluationService;
+		private readonly IMediator _mediator;
 
-		public EvaluationController(IEvaluationService evaluationService)
+		public EvaluationController(IMediator mediator)
 		{
-			_evaluationService = evaluationService;
+			_mediator = mediator;
 		}
 
 		//POST /api/tenders/{id}/ bids /{ bidId}/ score → Manually score bid
@@ -30,8 +35,9 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 			try
 			{
-				var result = await _evaluationService.EvaluateBidAsync(tenderId, bidId, evaluation);
+				var command = new EvaluateBidCommand(tenderId, bidId, evaluation);
 
+				var result = await _mediator.Send(command);
 				if (result.Success)
 				{
 					return Ok("Bid score adjusted successfully");
@@ -52,9 +58,10 @@ namespace BidingManagementSystem.Api.Controllers
 		{
 			try
 			{
-				var result = _evaluationService.GetBidScore(bidId);
+				var query = new GetBidScoreQuery(bidId);
 
-					return Ok(result);
+				var result = _mediator.Send(query).Result;
+				return Ok(result);
 			}
 			catch (Exception ex)
 			{
@@ -64,9 +71,9 @@ namespace BidingManagementSystem.Api.Controllers
 
 		//TODO: Automated scoring system for bid comparisons. an automated scoring based on price 
 
-				//Awarding
-				//POST /api/tenders/{id}/ bids /{ bidId}/ award → Select a winning bid
-				[Authorize(Roles = "ProcurementOfficer")]
+		//Awarding
+		//POST /api/tenders/{id}/ bids /{ bidId}/ award → Select a winning bid
+		[Authorize(Roles = "Evaluator")]
 		[HttpPost("tenders/{tenderId}/bids/{bidId}/award")]
 		public async Task<IActionResult> AwardBid(int tenderId, int bidId)
 		{
@@ -76,8 +83,9 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 			try
 			{
-				var result = await _evaluationService.AwardBidAsync(tenderId, bidId);
+				var command = new AwardBidCommand(tenderId, bidId);
 
+				var result = await _mediator.Send(command);
 				if (result.Success)
 				{
 					return Ok("Bid awarded successfully");
@@ -97,9 +105,10 @@ namespace BidingManagementSystem.Api.Controllers
 		{
 			try
 			{
-				var result = _evaluationService.GetAwardedBid(tenderId);
+				var query = new GetAwardedBidQuery(tenderId);
 
-					return Ok(result);
+				var result = _mediator.Send(query).Result;
+				return Ok(result);
 			}
 			catch (Exception ex)
 			{

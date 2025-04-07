@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace BidingManagementSystem.Domain.Models.Enums
 {
-	public enum Status
+	public enum BidStatus
 	{
-		Open,
-		Closed,
 		UnderReview,
-		Cancelled
+		Accepted,
+		Rejected
 	}
 }

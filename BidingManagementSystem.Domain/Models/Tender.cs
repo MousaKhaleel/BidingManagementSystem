@@ -20,22 +20,26 @@ namespace BidingManagementSystem.Domain.Models
 		[Required]
 		public string Description { get; set; }
 		public DateTime IssueDate { get; set; }
+		[Required]
 		public DateTime DeadLine { get; set; }
+		[Column(TypeName = "decimal(10,2)")]
 		public decimal? Budget { get; set; }
-		public Status Status { get; set; } = Status.Open;
+		public TenderStatus Status { get; set; } = TenderStatus.Open;
 
-		//TODO eligibility criteria.
+		public string EligibilityCriteria { get; set; }//TODO fix temp
 
+		[ForeignKey("UserId")]
 		public string UserId { get; set; }
 		public User User { get; set; }
+		[ForeignKey("EvaluationId")]
 		public int? EvaluationId { get; set; }
 		public Evaluation? Evaluation { get; set; }
 
 		public List<TenderCategory>? TenderCategories { get; set; }
-		public List<TenderDocument> Documents { get; set; }
+		public List<TenderDocument>? Documents { get; set; }
 		public List<Bid>? Bids { get; set; }
 
-		public int BidId { get; set; }
-		public Bid? WinnerBid { get; set; }
+		//public int BidId { get; set; }
+		//public Bid? WinnerBid { get; set; }
 	}
 }
