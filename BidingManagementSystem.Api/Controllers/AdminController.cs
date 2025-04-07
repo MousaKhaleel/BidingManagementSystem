@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BidingManagementSystem.Api.Controllers
 {
-    [Authorize(Roles = "Admin")]
+	[Authorize(Roles = "Admin")]
 	[Route("api/[controller]")]
 	[ApiController]
 	public class AdminController : ControllerBase
@@ -41,13 +41,13 @@ namespace BidingManagementSystem.Api.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
-		[HttpGet]
+		[HttpGet("Categories")]
 		public async Task<IActionResult> GetAllCategories()
 		{
 			try
 			{
 				var result = await _categoryService.GetAllCategoriesAsync();
-					return Ok(result);
+				return Ok(result);
 			}
 			catch (Exception ex)
 			{

@@ -17,7 +17,6 @@ namespace BidingManagementSystem.Infrastructure.Data
 		public DbSet<BidDocument> BidDocuments { get; set; }
 		public DbSet<Tender> Tenders { get; set; }
 		public DbSet<TenderDocument> TenderDocuments { get; set; }
-		public DbSet<User> Users { get; set; }
 		public DbSet<Category> Categories { get; set; }
 		public DbSet<TenderCategory> TenderCategories { get; set; }
 		public DbSet<Evaluation> Evaluations { get; set; }
@@ -45,6 +44,32 @@ namespace BidingManagementSystem.Infrastructure.Data
 			modelBuilder.Entity<TenderDocument>()
 						.Property(e => e.CreateDate)
 						.HasDefaultValueSql("GETDATE()");
+
+
+			modelBuilder.Entity<Bid>()
+				.HasOne(b => b.Bidder)
+				.WithMany(u => u.Bids)
+				.HasForeignKey(b => b.BidderId);
+
+			modelBuilder.Entity<Bid>()
+				.HasOne(b => b.Tender)
+				.WithMany(t => t.Bids)
+				.HasForeignKey(b => b.TenderId);
+
+			modelBuilder.Entity<TenderDocument>()
+				.HasOne(td => td.Tender)
+				.WithMany(t => t.Documents)
+				.HasForeignKey(td => td.TenderId);
+
+			modelBuilder.Entity<BidDocument>()
+				.HasOne(bd => bd.Bid)
+				.WithMany(b => b.Documents)
+				.HasForeignKey(bd => bd.BidId);
+
+			modelBuilder.Entity<Tender>()
+				.HasOne(t => t.Evaluation)
+				.WithOne(e => e.Tender)
+				.HasForeignKey<Tender>(t => t.EvaluationId);
 
 			modelBuilder.Entity<User>().Ignore(v => v.EmailConfirmed);
 			modelBuilder.Entity<User>().Ignore(v => v.SecurityStamp);

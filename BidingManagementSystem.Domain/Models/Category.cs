@@ -13,7 +13,7 @@ namespace BidingManagementSystem.Domain.Models
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int CategoryId { get; set; }
-		public string Name { get; private set; }
+		public string Name { get; set; }
 
 		public List<TenderCategory>? TenderCategories { get; set; }
 	}

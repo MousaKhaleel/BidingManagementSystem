@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 namespace BidingManagementSystem.Infrastructure.Identity
 {
 	public class PasswordHasher
-	{
+	{//TODO remove
 	}
 }

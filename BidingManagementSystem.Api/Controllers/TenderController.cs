@@ -1,5 +1,15 @@
-﻿using BidingManagementSystem.Application.Dtos;
+﻿using BidingManagementSystem.Application.Commands.Tender.CreateTender;
+using BidingManagementSystem.Application.Commands.Tender.DeleteTender;
+using BidingManagementSystem.Application.Commands.Tender.DeleteTenderDocumentAsync;
+using BidingManagementSystem.Application.Commands.Tender.UpdateTender;
+using BidingManagementSystem.Application.Commands.Tender.UploadTenderDocumentAsync;
+using BidingManagementSystem.Application.Dtos;
 using BidingManagementSystem.Application.Interfaces;
+using BidingManagementSystem.Application.Queries.Tender.GetAllTendersAsync;
+using BidingManagementSystem.Application.Queries.Tender.GetOpenTendersAsync;
+using BidingManagementSystem.Application.Queries.Tender.GetTenderByIdAsync;
+using BidingManagementSystem.Application.Queries.Tender.GetTenderDocumentsAsync;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -12,11 +22,11 @@ namespace BidingManagementSystem.Api.Controllers
 	[ApiController]
 	public class TenderController : ControllerBase
 	{
-		private readonly ITenderService _tenderService;
+		private readonly IMediator _mediator;
 
-		public TenderController(ITenderService tenderService)
+		public TenderController(IMediator mediator)
 		{
-			_tenderService = tenderService;
+			_mediator = mediator;
 		}
 
 		//POST /api/tenders → Create a new tender(Procurement officer)
@@ -30,7 +40,9 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 			try
 			{
-				var result = await _tenderService.CreateTenderAsync(tenderDto);
+				var command = new CreateTenderCommand(tenderDto);
+
+				var result = await _mediator.Send(command);
 
 				if (result.Success)
 				{
@@ -46,14 +58,15 @@ namespace BidingManagementSystem.Api.Controllers
 		}
 
 		//GET /api/tenders → Get all tenders
-		[HttpGet]
+		[HttpGet("Tenders")]
 		public async Task<IActionResult> GetAllTenders()
 		{
 			try
 			{
-				var result = await _tenderService.GetAllTendersAsync();
+				var query = new GetAllTendersQuery();
 
-					return Ok(result);
+				var result = await _mediator.Send(query);
+				return Ok(result);
 			}
 			catch (Exception ex)
 			{
@@ -62,14 +75,15 @@ namespace BidingManagementSystem.Api.Controllers
 		}
 
 		//GET /api/tenders/open → Get open tenders for bidding
-		[HttpGet("open")]
+		[HttpGet("Tenders/open")]
 		public async Task<IActionResult> GetOpenTenders()
 		{
 			try
 			{
-				var result = await _tenderService.GetOpenTendersAsync();
+				var query = new GetOpenTendersQuery();
 
-					return Ok(result);
+				var result = await _mediator.Send(query);
+				return Ok(result);
 			}
 			catch (Exception ex)
 			{
@@ -83,9 +97,10 @@ namespace BidingManagementSystem.Api.Controllers
 		{
 			try
 			{
-				var result = await _tenderService.GetTenderByIdAsync(tenderId);
+				var query = new GetTenderByIdQuery(tenderId);
 
-					return Ok(result);
+				var result = await _mediator.Send(query);
+				return Ok(result);
 			}
 			catch (Exception ex)
 			{
@@ -104,8 +119,9 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 			try
 			{
-				var result = await _tenderService.UpdateTenderAsync(tenderId, tenderDto);
+				var command = new UpdateTenderCommand(tenderId, tenderDto);
 
+				var result = await _mediator.Send(command);
 				if (result.Success)
 				{
 					return Ok("Tender updated successfully");
@@ -127,8 +143,9 @@ namespace BidingManagementSystem.Api.Controllers
 		{
 			try
 			{
-				var result = await _tenderService.DeleteTenderAsync(tenderId);
+				var command = new DeleteTenderCommand(tenderId);
 
+				var result = await _mediator.Send(command);
 				if (result.Success)
 				{
 					return Ok("Tender deleted successfully");
@@ -154,8 +171,9 @@ namespace BidingManagementSystem.Api.Controllers
 
 			try
 			{
-				var result = await _tenderService.UploadTenderDocumentAsync(tenderId, file);
+				var command = new UploadTenderDocumentCommand(tenderId, file);
 
+				var result = await _mediator.Send(command);
 				if (result.Success)
 				{
 					return Ok("Document uploaded successfully");
@@ -177,9 +195,10 @@ namespace BidingManagementSystem.Api.Controllers
 		{
 			try
 			{
-				var result = await _tenderService.GetTenderDocumentsAsync(tenderId);
+				var query = new GetTenderDocumentsQuery(tenderId);
 
-					return Ok(result);
+				var result = await _mediator.Send(query);
+				return Ok(result);
 			}
 			catch (Exception ex)
 			{
@@ -189,13 +208,14 @@ namespace BidingManagementSystem.Api.Controllers
 
 		//DELETE /api/tenders/{id}/ documents /{ docId} → Remove a document
 		[Authorize(Roles = "ProcurementOfficer")]
-		[HttpDelete("{tenderId}/documents/{docId}")]
-		public async Task<IActionResult> DeleteTenderDocument(int tenderId, int docId)
+		[HttpDelete("documents/{docId}")]
+		public async Task<IActionResult> DeleteTenderDocument(int docId)
 		{
 			try
 			{
-				var result = await _tenderService.DeleteTenderDocumentAsync(tenderId, docId);
+				var command = new DeleteTenderDocumentCommand(docId);
 
+				var result = await _mediator.Send(command);
 				if (result.Success)
 				{
 					return Ok("Document deleted successfully");
@@ -215,7 +235,6 @@ namespace BidingManagementSystem.Api.Controllers
 		//{
 		//	try
 		//	{
-		//		var result = await _tenderService.GetTenderCategoriesAsync();
 
 		//			return Ok(result);
 		//	}

@@ -14,12 +14,19 @@ namespace BidingManagementSystem.Domain.Models
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int EvaluationId { get; set; }
+		[Required]
+		[Column(TypeName = "decimal(10,2)")]
 		public decimal Score { get; set; }
 		public DateTime EvaluationDate { get; set; }
 		public EvaluationCriteria Criteria { get; set; }
 
+		[ForeignKey("BidId")]
+		public int BidId { get; set; }
+		public Bid Bid { get; set; }
+		[ForeignKey("TenderId")]
 		public int TenderId { get; set; }
 		public Tender Tender { get; set; }
+		[ForeignKey("EvaluatorId")]
 		public string EvaluatorId { get; set; }
 		public User Evaluator { get; set; }
 	}

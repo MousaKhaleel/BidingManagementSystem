@@ -1,3 +1,5 @@
+using BidingManagementSystem.Application.Interfaces;
+using BidingManagementSystem.Application.Services;
 using BidingManagementSystem.Domain.Interfaces;
 using BidingManagementSystem.Domain.Models;
 using BidingManagementSystem.Infrastructure.Data;
@@ -53,9 +55,21 @@ builder.Services.AddAuthentication(options =>
 		};
 	});
 
-builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddMediatR(configuration =>
+{
+	configuration.RegisterServicesFromAssembly(typeof(Program).Assembly);
+});
 
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+//TODO
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<ITenderRepository, TenderRepository>();
+builder.Services.AddScoped<IBidRepository, BidRepository>();
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+
 
 var app = builder.Build();
 
@@ -73,10 +87,10 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-using (var scope = app.Services.CreateScope())
-{
-	var initializer = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
-	await initializer.InitializeAsync();
-}
+//using (var scope = app.Services.CreateScope()) //TODO UNCOMENT
+//{
+//	var initializer = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
+//	await initializer.InitializeAsync();
+//}
 
 app.Run();
