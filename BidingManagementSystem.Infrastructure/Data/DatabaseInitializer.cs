@@ -82,7 +82,7 @@ namespace BidingManagementSystem.Infrastructure.Data
 					await userManager.AddToRoleAsync(adminUser, "Admin");
 				}
 			}
-			//TODO: seed industry, type, and location.
+			//TODO: seed industry, type, and location categories.
 		}
 	}
 }

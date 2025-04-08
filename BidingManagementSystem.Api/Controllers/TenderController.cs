@@ -2,6 +2,7 @@
 using BidingManagementSystem.Application.Commands.Tender.DeleteTender;
 using BidingManagementSystem.Application.Commands.Tender.DeleteTenderDocumentAsync;
 using BidingManagementSystem.Application.Commands.Tender.UpdateTender;
+using BidingManagementSystem.Application.Commands.Tender.UpdateTenderDocumentAsync;
 using BidingManagementSystem.Application.Commands.Tender.UploadTenderDocumentAsync;
 using BidingManagementSystem.Application.Dtos;
 using BidingManagementSystem.Application.Interfaces;
@@ -187,7 +188,32 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//TODO: update(replace) doc
+		//TODO: update(replace) doc path
+		[HttpPut("documents/{docId}")]
+		public async Task<IActionResult> UpdateTenderDocument(int docId, IFormFile file)//TODO path not file
+		{
+			if (file == null || file.Length == 0)
+			{
+				return BadRequest("No file uploaded");
+			}
+
+			try
+			{
+				var command = new UpdateTenderDocumentCommand(docId, file);
+
+				var result = await _mediator.Send(command);
+				if (result.Success)
+				{
+					return Ok("Document updated successfully");
+				}
+
+				return BadRequest(result.ErrorMessage);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
 
 		//GET /api/tenders/{id}/ documents → Get tender documents
 		[HttpGet("{tenderId}/documents")]
