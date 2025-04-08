@@ -1,4 +1,5 @@
-﻿using BidingManagementSystem.Domain.Interfaces;
+﻿using BidingManagementSystem.Application.Notifications;
+using BidingManagementSystem.Domain.Interfaces;
 using BidingManagementSystem.Domain.Models;
 using BidingManagementSystem.Domain.Models.Enums;
 using MediatR;
@@ -13,14 +14,16 @@ namespace BidingManagementSystem.Application.Commands.Evaluation.AwardBid
 	public class AwardBidCommandHandler : IRequestHandler<AwardBidCommand, (bool Success, string ErrorMessage)>
 	{
 		private readonly IUnitOfWork _unitOfWork;
+		private readonly INotificationService _notificationService;
 
-		public AwardBidCommandHandler(IUnitOfWork unitOfWork)
+		public AwardBidCommandHandler(IUnitOfWork unitOfWork, INotificationService notificationService)
 		{
 			_unitOfWork = unitOfWork;
+			_notificationService = notificationService;
 		}
 		public async Task<(bool Success, string ErrorMessage)> Handle(AwardBidCommand request, CancellationToken cancellationToken)
 		{
-			var bid = await _unitOfWork.bidRepository.GetByIdAsync(request.BidId);
+			var bid = await _unitOfWork.bidRepository.GetBidByIdAsync(request.BidId);
 			var award = new Award
 			{
 				TenderId = bid.TenderId,
@@ -28,8 +31,9 @@ namespace BidingManagementSystem.Application.Commands.Evaluation.AwardBid
 			};
 			await _unitOfWork.awardRepository.AddAsync(award);
 
-				bid.Status = BidStatus.Accepted;
-				await _unitOfWork.bidRepository.UpdateAsync(bid);
+			bid.Status = BidStatus.Accepted;
+			await _unitOfWork.bidRepository.UpdateAsync(bid);
+			await _notificationService.SendEmailAsync(bid.Bidder.Email, "Bid Awarded", $"Congratulations! Your bid for tender {bid.Tender.Title} has been awarded.");
 
 			var bids = await _unitOfWork.bidRepository.GetBidsByTenderIdAsync(bid.TenderId);
 			foreach (var b in bids)
@@ -38,6 +42,7 @@ namespace BidingManagementSystem.Application.Commands.Evaluation.AwardBid
 				{
 					b.Status = BidStatus.Rejected;
 					await _unitOfWork.bidRepository.UpdateAsync(b);
+					await _notificationService.SendEmailAsync(b.Bidder.Email, "Bid Rejected", $"Unfortunately, your bid for tender {bid.Tender.Title} has been rejected.");
 				}
 			}
 

@@ -1,4 +1,5 @@
-﻿using BidingManagementSystem.Application.Commands.Evaluation.AwardBid;
+﻿using BidingManagementSystem.Application.Commands.Evaluation.AutoEvaluateBidAsync;
+using BidingManagementSystem.Application.Commands.Evaluation.AwardBid;
 using BidingManagementSystem.Application.Commands.Evaluation.EvaluateBid;
 using BidingManagementSystem.Application.Dtos;
 using BidingManagementSystem.Application.Queries.Evaluation.GetAwardedBidAsync;
@@ -65,28 +66,27 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//TODO: Automated scoring system for bid comparisons. an automated scoring based on price 
-		//[Authorize(Roles = "Evaluator")]
-		//[HttpPost("Bids/{bidId}/autoEvaluate")]
-		//public async Task<IActionResult> AutoEvaluateBid(int bidId)
-		//{
-		//	try
-		//	{
-		//		var command = new AutoEvaluateBidsCommand(bidId);
-		//		var result = await _mediator.Send(command);
+		[Authorize(Roles = "Evaluator")]
+		[HttpPost("Bids/{bidId}/autoEvaluate")]
+		public async Task<IActionResult> AutoEvaluateBid(int bidId)
+		{
+			try
+			{
+				var command = new AutoEvaluateBidCommand(bidId);
+				var result = await _mediator.Send(command);
 
-		//		if (result.Success)
-		//		{
-		//			return Ok("Bids were automatically evaluated based on price.");
-		//		}
+				if (result.Success)
+				{
+					return Ok("Bids were automatically evaluated based on price.");
+				}
 
-		//		return BadRequest(result.ErrorMessage);
-		//	}
-		//	catch (Exception ex)
-		//	{
-		//		return BadRequest($"Error: {ex.Message}");
-		//	}
-		//}
+				return BadRequest(result.ErrorMessage);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest($"Error: {ex.Message}");
+			}
+		}
 
 		[Authorize(Roles = "Evaluator")]
 		[HttpPost("bids/{bidId}/award")]
