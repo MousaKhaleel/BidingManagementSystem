@@ -10,7 +10,7 @@ namespace BidingManagementSystem.Application.Commands.Bid.DeleteBidDocumentAsync
 	public class DeleteBidDocumentCommandHandler : IRequestHandler<DeleteBidDocumentCommand, (bool Success, string ErrorMessage)>
 	{
 		public Task<(bool Success, string ErrorMessage)> Handle(DeleteBidDocumentCommand request, CancellationToken cancellationToken)
-		{
+		{//TODO
 			throw new NotImplementedException();
 		}
 	}

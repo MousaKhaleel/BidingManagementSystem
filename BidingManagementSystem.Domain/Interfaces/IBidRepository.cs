@@ -9,9 +9,7 @@ namespace BidingManagementSystem.Domain.Interfaces
 {
 	public interface IBidRepository : IGenericRepository<Bid>
 	{
-		Task<bool> AwardBidAsync(int tenderId, int bidId);
 		Task<Bid> GetAwardedBidAsync(int tenderId);
-		Task<List<BidDocument>> GetBidDocumentsAsync(int bidId);
 		Task<IEnumerable<Bid>> GetBidsByTenderIdAsync(int tenderId);
 	}
 }

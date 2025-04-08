@@ -22,6 +22,7 @@ namespace BidingManagementSystem.Infrastructure.UnitOfWork
 		public IGenericRepository<Award> awardRepository { get; private set; }
 		public IBidDocumentRepository bidDocumentRepository { get; private set; }
 		public ITenderDocumentRepository tenderDocumentRepository { get; private set; }
+		public IGenericRepository<Category> categoryRepository { get; private set; }
 
 		public UnitOfWork(ApplicationDbContext dbcontext)
 		{
@@ -33,6 +34,7 @@ namespace BidingManagementSystem.Infrastructure.UnitOfWork
 			awardRepository = new GenericRepository<Award>(_context);
 			bidDocumentRepository = new BidDocumentRepository(_context);
 			tenderDocumentRepository = new TenderDocumentRepository(_context);
+			categoryRepository = new GenericRepository<Category>(_context);
 		}
 		public async Task<int> SaveChangesAsync()
 		{

@@ -49,27 +49,33 @@ namespace BidingManagementSystem.Infrastructure.Data
 			modelBuilder.Entity<Bid>()
 				.HasOne(b => b.Bidder)
 				.WithMany(u => u.Bids)
-				.HasForeignKey(b => b.BidderId);
+				.HasForeignKey(b => b.BidderId)
+				.OnDelete(DeleteBehavior.Restrict); ;
 
 			modelBuilder.Entity<Bid>()
 				.HasOne(b => b.Tender)
 				.WithMany(t => t.Bids)
-				.HasForeignKey(b => b.TenderId);
+				.HasForeignKey(b => b.TenderId)
+				.OnDelete(DeleteBehavior.Restrict);
 
 			modelBuilder.Entity<TenderDocument>()
 				.HasOne(td => td.Tender)
 				.WithMany(t => t.Documents)
-				.HasForeignKey(td => td.TenderId);
+				.HasForeignKey(td => td.TenderId)
+				.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<BidDocument>()
 				.HasOne(bd => bd.Bid)
 				.WithMany(b => b.Documents)
-				.HasForeignKey(bd => bd.BidId);
+				.HasForeignKey(bd => bd.BidId)
+				.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<Tender>()
 				.HasOne(t => t.Evaluation)
 				.WithOne(e => e.Tender)
 				.HasForeignKey<Tender>(t => t.EvaluationId);
+
+			modelBuilder.Entity<User>().ToTable("Users");
 
 			modelBuilder.Entity<User>().Ignore(v => v.EmailConfirmed);
 			modelBuilder.Entity<User>().Ignore(v => v.SecurityStamp);

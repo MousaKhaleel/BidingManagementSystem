@@ -1,4 +1,6 @@
 ﻿using BidingManagementSystem.Domain.Interfaces;
+using BidingManagementSystem.Domain.Models;
+using BidingManagementSystem.Domain.Models.Enums;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -18,15 +20,23 @@ namespace BidingManagementSystem.Application.Commands.Evaluation.AwardBid
 		}
 		public async Task<(bool Success, string ErrorMessage)> Handle(AwardBidCommand request, CancellationToken cancellationToken)
 		{
-			var result = await _unitOfWork.bidRepository.AwardBidAsync(request.TenderId, request.BidId);
-			if (result)
+			var award = new Award
 			{
-				return (true, null);
-			}
-			else
-			{
-				return (false, "Failed to award the bid.");
-			}
+				TenderId = request.TenderId,
+				WinningBidId = request.BidId,
+			};
+			await _unitOfWork.awardRepository.AddAsync(award);
+
+			var bid = await _unitOfWork.bidRepository.GetByIdAsync(request.BidId);
+				bid.Status = BidStatus.Accepted;
+				await _unitOfWork.bidRepository.UpdateAsync(bid);
+
+			var tender = await _unitOfWork.tenderRepository.GetByIdAsync(request.TenderId);
+			tender.Status = TenderStatus.Awarded;
+			await _unitOfWork.tenderRepository.UpdateAsync(tender);
+
+			await _unitOfWork.SaveChangesAsync();
+			return (true, "");
 		}
 	}
 }

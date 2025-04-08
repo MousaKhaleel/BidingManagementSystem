@@ -16,6 +16,7 @@ namespace BidingManagementSystem.Domain.Interfaces
 		IGenericRepository<Award> awardRepository { get; }
 		IBidDocumentRepository bidDocumentRepository { get; }
 		ITenderDocumentRepository tenderDocumentRepository { get; }
+		IGenericRepository<Category> categoryRepository { get; }
 		Task<int> SaveChangesAsync();
 	}
 }

@@ -1,5 +1,8 @@
-﻿using BidingManagementSystem.Application.Dtos;
+﻿using BidingManagementSystem.Application.Commands.Category.AddCategoryAsync;
+using BidingManagementSystem.Application.Dtos;
 using BidingManagementSystem.Application.Interfaces;
+using BidingManagementSystem.Application.Queries.Category.GetAllCategoriesAsync;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,13 +14,13 @@ namespace BidingManagementSystem.Api.Controllers
 	[ApiController]
 	public class AdminController : ControllerBase
 	{
-		private readonly ICategoryService _categoryService;
+		private readonly IMediator _mediator;
 
-		public AdminController(ICategoryService categoryService)
+		public AdminController(IMediator mediator)
 		{
-			_categoryService = categoryService;
+			_mediator = mediator;
 		}
-		//TODO
+		//TODO convert to cqrs
 		[HttpPost("Category")]
 		public async Task<IActionResult> AddCategory([FromBody] CategoryDto categoryDto)
 		{
@@ -27,8 +30,9 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 			try
 			{
-				var result = await _categoryService.AddCategoryAsync(categoryDto);
+				var command = new AddCategoryCommand(categoryDto);
 
+				var result = await _mediator.Send(command);
 				if (result.Success)
 				{
 					return Ok("Category added successfully");
@@ -46,7 +50,9 @@ namespace BidingManagementSystem.Api.Controllers
 		{
 			try
 			{
-				var result = await _categoryService.GetAllCategoriesAsync();
+				var query = new GetAllCategoriesQuery();
+
+				var result = await _mediator.Send(query);
 				return Ok(result);
 			}
 			catch (Exception ex)

@@ -1,6 +1,7 @@
 ﻿using BidingManagementSystem.Domain.Interfaces;
 using BidingManagementSystem.Domain.Models;
 using BidingManagementSystem.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,30 +18,16 @@ namespace BidingManagementSystem.Infrastructure.Repositories
 		{
 			_context = context;
 		}
-		//TODO
-		public Task<bool> AwardBidAsync(int tenderId, int bidId)
+
+		public async Task<Bid> GetAwardedBidAsync(int tenderId)
 		{
-			throw new NotImplementedException();
+			var award = await _context.Awards.Where(x=>x.TenderId == tenderId).FirstOrDefaultAsync();
+			return await _context.Bids.Where(x => x.BidId == award.WinningBidId).FirstOrDefaultAsync();
 		}
 
-		public Task<Bid> GetAwardedBidAsync(int tenderId)
+		public async Task<IEnumerable<Bid>> GetBidsByTenderIdAsync(int tenderId)
 		{
-			throw new NotImplementedException();
-		}
-
-		public Task<List<BidDocument>> GetBidDocumentsAsync(int bidId)
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task<IEnumerable<object>> GetBidsByTenderIdAsync(int tenderId)
-		{
-			throw new NotImplementedException();
-		}
-
-		Task<IEnumerable<Bid>> IBidRepository.GetBidsByTenderIdAsync(int tenderId)
-		{
-			throw new NotImplementedException();
+			return await _context.Bids.Include(b => b.Documents).Include(b => b.Bidder).Where(b => b.TenderId == tenderId).ToListAsync();
 		}
 	}
 }
