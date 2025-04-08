@@ -1,3 +1,7 @@
+using BidingManagementSystem.Application.Commands.Auth.ChangeUserPasswordAsync;
+using BidingManagementSystem.Application.Commands.Auth.LoginUserAsync;
+using BidingManagementSystem.Application.Commands.Auth.LogoutUserAsync;
+using BidingManagementSystem.Application.Commands.Auth.RegisterUserAsync;
 using BidingManagementSystem.Application.Commands.Bid.DeleteBidAsync;
 using BidingManagementSystem.Application.Commands.Bid.DeleteBidDocumentAsync;
 using BidingManagementSystem.Application.Commands.Bid.SubmitBid;
@@ -11,7 +15,8 @@ using BidingManagementSystem.Application.Commands.Tender.DeleteTender;
 using BidingManagementSystem.Application.Commands.Tender.DeleteTenderDocumentAsync;
 using BidingManagementSystem.Application.Commands.Tender.UpdateTender;
 using BidingManagementSystem.Application.Commands.Tender.UploadTenderDocumentAsync;
-using BidingManagementSystem.Application.Interfaces;
+using BidingManagementSystem.Application.Queries.Auth.GenerateJwtTokenStringAsync;
+using BidingManagementSystem.Application.Queries.Auth.GetUserProfileAsync;
 using BidingManagementSystem.Application.Queries.Bid.GetBidByIdAsync;
 using BidingManagementSystem.Application.Queries.Bid.GetBidDocumentsAsync;
 using BidingManagementSystem.Application.Queries.Bid.GetBidsByTenderIdAsync;
@@ -23,7 +28,6 @@ using BidingManagementSystem.Application.Queries.Tender.GetOpenTendersAsync;
 using BidingManagementSystem.Application.Queries.Tender.GetTenderByIdAsync;
 using BidingManagementSystem.Application.Queries.Tender.GetTenderDocumentsAsync;
 using BidingManagementSystem.Application.Queries.Tender.GetTendersByCategoryAsync;
-using BidingManagementSystem.Application.Services;
 using BidingManagementSystem.Domain.Interfaces;
 using BidingManagementSystem.Domain.Models;
 using BidingManagementSystem.Infrastructure.Data;
@@ -127,6 +131,12 @@ builder.Services.AddMediatR(configuration =>
 {
 	configuration.RegisterServicesFromAssembly(typeof(Program).Assembly);
 
+	configuration.RegisterServicesFromAssembly(typeof(ChangeUserPasswordCommandHandler).Assembly);
+	configuration.RegisterServicesFromAssembly(typeof(LoginUserCommandHandler).Assembly);
+	configuration.RegisterServicesFromAssembly(typeof(LogoutUserCommandHandler).Assembly);
+	configuration.RegisterServicesFromAssembly(typeof(RegisterUserCommandHandler).Assembly);
+
+
 	configuration.RegisterServicesFromAssembly(typeof(DeleteBidCommandHandler).Assembly);
 	configuration.RegisterServicesFromAssembly(typeof(DeleteBidDocumentCommandHandler).Assembly);
 	configuration.RegisterServicesFromAssembly(typeof(SubmitBidCommandHandler).Assembly);
@@ -143,6 +153,10 @@ builder.Services.AddMediatR(configuration =>
 	configuration.RegisterServicesFromAssembly(typeof(DeleteTenderDocumentCommandHandler).Assembly);
 	configuration.RegisterServicesFromAssembly(typeof(UpdateTenderCommandHandler).Assembly);
 	configuration.RegisterServicesFromAssembly(typeof(UploadTenderDocumentCommandHandler).Assembly);
+
+	configuration.RegisterServicesFromAssembly(typeof(GenerateJwtTokenStringQueryHandler).Assembly);
+	configuration.RegisterServicesFromAssembly(typeof(GetUserProfileQueryHandler).Assembly);
+
 
 	configuration.RegisterServicesFromAssembly(typeof(GetBidByIdQueryHandler).Assembly);
 	configuration.RegisterServicesFromAssembly(typeof(GetBidDocumentsQueryHandler).Assembly);
@@ -167,7 +181,6 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped<ITenderRepository, TenderRepository>();
 builder.Services.AddScoped<IBidRepository, BidRepository>();
 
-builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped<DatabaseInitializer>();
 

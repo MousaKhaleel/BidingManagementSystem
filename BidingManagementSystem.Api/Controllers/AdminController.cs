@@ -1,6 +1,5 @@
 ﻿using BidingManagementSystem.Application.Commands.Category.AddCategoryAsync;
 using BidingManagementSystem.Application.Dtos;
-using BidingManagementSystem.Application.Interfaces;
 using BidingManagementSystem.Application.Queries.Category.GetAllCategoriesAsync;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

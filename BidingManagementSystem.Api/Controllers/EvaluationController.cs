@@ -1,10 +1,8 @@
 ﻿using BidingManagementSystem.Application.Commands.Evaluation.AwardBid;
 using BidingManagementSystem.Application.Commands.Evaluation.EvaluateBid;
 using BidingManagementSystem.Application.Dtos;
-using BidingManagementSystem.Application.Interfaces;
 using BidingManagementSystem.Application.Queries.Evaluation.GetAwardedBidAsync;
 using BidingManagementSystem.Application.Queries.Evaluation.GetBidScoreAsync;
-using BidingManagementSystem.Application.Services;
 using BidingManagementSystem.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
