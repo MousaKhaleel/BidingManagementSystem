@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using BidingManagementSystem.Domain.Interfaces;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,15 @@ namespace BidingManagementSystem.Application.Commands.Tender.UploadTenderDocumen
 {
 	public class UploadTenderDocumentCommandHandler : IRequestHandler<UploadTenderDocumentCommand, (bool Success, string ErrorMessage)>
 	{
+		private readonly IUnitOfWork _unitOfWork;
+
+		public UploadTenderDocumentCommandHandler(IUnitOfWork unitOfWork)
+		{
+			_unitOfWork = unitOfWork;
+		}
 		public Task<(bool Success, string ErrorMessage)> Handle(UploadTenderDocumentCommand request, CancellationToken cancellationToken)
 		{
-			// Implement the logic to handle the command here
+			//TODO
 			throw new NotImplementedException();
 		}
 	}

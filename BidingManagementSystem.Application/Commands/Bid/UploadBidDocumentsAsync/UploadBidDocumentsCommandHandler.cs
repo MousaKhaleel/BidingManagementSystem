@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using BidingManagementSystem.Domain.Interfaces;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,14 @@ namespace BidingManagementSystem.Application.Commands.Bid.UploadBidDocumentsAsyn
 {
 	public class UploadBidDocumentsCommandHandler : IRequestHandler<UploadBidDocumentsCommand, (bool Success, string ErrorMessage)>
 	{
-		public Task<(bool Success, string ErrorMessage)> Handle(UploadBidDocumentsCommand request, CancellationToken cancellationToken)
+		private readonly IUnitOfWork _unitOfWork;
+
+		public UploadBidDocumentsCommandHandler(IUnitOfWork unitOfWork)
 		{
+			_unitOfWork = unitOfWork;
+		}
+		public Task<(bool Success, string ErrorMessage)> Handle(UploadBidDocumentsCommand request, CancellationToken cancellationToken)
+		{//TODO
 			throw new NotImplementedException();
 		}
 	}

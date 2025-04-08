@@ -49,7 +49,7 @@ namespace BidingManagementSystem.Api.Controllers
 				if (result.Success)
 				{
 					var tokinString = _authService.GenerateJwtTokenString(result.user);
-					return Ok("Login successful, tokin:" + tokinString);
+					return Ok("Login successful, tokin:" + tokinString.Result);
 				}
 				return BadRequest(result.ErrorMessage);
 			}

@@ -19,7 +19,6 @@ using System.Net.Mail;
 
 namespace BidingManagementSystem.Api.Controllers
 {
-	//[Authorize(Roles = "Bidder")]//TODO enable
 	[Route("api/[controller]")]
 	[ApiController]
 	public class BidController : ControllerBase

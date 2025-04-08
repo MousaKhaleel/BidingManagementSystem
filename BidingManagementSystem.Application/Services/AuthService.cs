@@ -93,9 +93,26 @@ namespace BidingManagementSystem.Application.Services
 			await _signInManager.SignOutAsync();
 		}
 
-		public Task<(bool Success, string ErrorMessage)> RegisterAsync(RegisterDto registerDto)
+		public async Task<(bool Success, string ErrorMessage)> RegisterAsync(RegisterDto registerDto)
 		{
-			throw new NotImplementedException();//TODO
+			var user = new User
+			{
+				UserName = registerDto.UserName,
+				Email = registerDto.Email,
+			};
+			var result = await _userManager.CreateAsync(user, registerDto.Password);
+			if (!result.Succeeded)
+			{
+				return (false, string.Join(", ", result.Errors.Select(e => e.Description)));
+			}
+			var roleResult = await _userManager.AddToRoleAsync(user, registerDto.Role.ToString());
+			if (!roleResult.Succeeded)
+			{
+				return (false, string.Join(", ", roleResult.Errors.Select(e => e.Description)));
+			}
+			await _unitOfWork.userRepository.AddAsync(user);
+			await _unitOfWork.SaveChangesAsync();
+			return (true, string.Empty);
 		}
 	}
 }

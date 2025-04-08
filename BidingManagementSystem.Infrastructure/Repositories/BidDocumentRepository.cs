@@ -19,7 +19,7 @@ namespace BidingManagementSystem.Infrastructure.Repositories
 		}
 
 		public Task<IEnumerable<BidDocument>> GetBidDocumentsAsync(int bidId)
-		{
+		{//TODO
 			throw new NotImplementedException();
 		}
 	}
