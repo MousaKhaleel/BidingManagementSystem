@@ -25,25 +25,27 @@ namespace BidingManagementSystem.Application.Commands.Evaluation.EvaluateBid
 		}
 		public async Task<(bool, string)> Handle(EvaluateBidCommand request, CancellationToken cancellationToken)
 		{
+			var bid = await _unitOfWork.bidRepository.GetByIdAsync(request.BidId);
 			var userId = _userManager.GetUserId(_httpContextAccessor.HttpContext.User);
 			var evaluation = new Domain.Models.Evaluation
 			{
-				TenderId = request.TenderId,
+				TenderId = bid.TenderId,
 				BidId = request.BidId,
-				Score = request.Evaluation.Score,
+				Score = request.EvaluationDto.Score,
+				Criteria = request.EvaluationDto.Criteria,
 				EvaluatorId = userId
 			};
-			var bid = await _unitOfWork.bidRepository.GetByIdAsync(request.BidId);
+			await _unitOfWork.evaluationRepository.AddAsync(evaluation);
+
 			bid.Status = BidStatus.Accepted;
 			await _unitOfWork.bidRepository.UpdateAsync(bid);
 
-			var tender = await _unitOfWork.tenderRepository.GetByIdAsync(request.TenderId);
+			var tender = await _unitOfWork.tenderRepository.GetByIdAsync(bid.TenderId);
 			tender.Status = TenderStatus.Awarded;
 			await _unitOfWork.tenderRepository.UpdateAsync(tender);
 
 			await _unitOfWork.SaveChangesAsync();
 
-			await _unitOfWork.evaluationRepository.AddAsync(evaluation);
 			return (true, null);
 		}
 	}

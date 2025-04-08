@@ -18,12 +18,12 @@ namespace BidingManagementSystem.Application.Queries.Evaluation.GetBidScoreAsync
 		}
 		public async Task<decimal> Handle(GetBidScoreQuery request, CancellationToken cancellationToken)
 		{
-			var bidScore = await _unitOfWork.bidRepository.GetByIdAsync(request.bidId);
-			if (bidScore == null)
+			var evaluation = await _unitOfWork.evaluationRepository.GetEvaluationByBidIdAsync(request.bidId);
+			if (evaluation == null)
 			{
-				return default(decimal);
+				return (-1);
 			}
-			return (bidScore.Amount);
+			return (evaluation.Score);
 		}
 	}
 }

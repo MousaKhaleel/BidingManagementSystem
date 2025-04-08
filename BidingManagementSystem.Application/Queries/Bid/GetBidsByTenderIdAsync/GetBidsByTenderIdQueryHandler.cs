@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BidingManagementSystem.Application.Queries.Bid.GetBidsByTenderIdAsync
 {
-	public class GetBidsByTenderIdQueryHandler : IRequestHandler<GetBidsByTenderIdQuery, IEnumerable<BidDto>>
+	public class GetBidsByTenderIdQueryHandler : IRequestHandler<GetBidsByTenderIdQuery, IEnumerable<GetBidDto>>
 	{
 		private readonly IUnitOfWork _unitOfWork;
 
@@ -18,10 +18,10 @@ namespace BidingManagementSystem.Application.Queries.Bid.GetBidsByTenderIdAsync
 			_unitOfWork = unitOfWork;
 		}
 
-		public async Task<IEnumerable<BidDto>> Handle(GetBidsByTenderIdQuery request, CancellationToken cancellationToken)
+		public async Task<IEnumerable<GetBidDto>> Handle(GetBidsByTenderIdQuery request, CancellationToken cancellationToken)
 		{
 			var bids = await _unitOfWork.bidRepository.GetBidsByTenderIdAsync(request.tenderId);
-			return bids.Select(b => new BidDto
+			return bids.Select(b => new GetBidDto
 			{
 				TenderId = b.TenderId,
 				BidderId = b.BidderId,

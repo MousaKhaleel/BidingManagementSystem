@@ -1,6 +1,7 @@
 ﻿using BidingManagementSystem.Domain.Interfaces;
 using BidingManagementSystem.Domain.Models;
 using BidingManagementSystem.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +19,9 @@ namespace BidingManagementSystem.Infrastructure.Repositories
 			_context = context;
 		}
 
-		public Task<IEnumerable<BidDocument>> GetBidDocumentsAsync(int bidId)
-		{//TODO
-			throw new NotImplementedException();
+		public async Task<IEnumerable<BidDocument>> GetBidDocumentsAsync(int bidId)
+		{
+			return await _context.BidDocuments.Where(x => x.BidId == bidId).ToListAsync();
 		}
 	}
 }

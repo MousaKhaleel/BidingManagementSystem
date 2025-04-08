@@ -1,6 +1,7 @@
 ﻿using BidingManagementSystem.Domain.Interfaces;
 using BidingManagementSystem.Domain.Models;
 using BidingManagementSystem.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,11 @@ namespace BidingManagementSystem.Infrastructure.Repositories
 		public EvaluationRepository(ApplicationDbContext context) : base(context)
 		{
 			_context = context;
+		}
+
+		public async Task<Evaluation> GetEvaluationByBidIdAsync(int bidId)
+		{
+			return await _context.Evaluations.Where(x=>x.BidId== bidId).FirstOrDefaultAsync();
 		}
 	}
 }

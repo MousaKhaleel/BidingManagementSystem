@@ -33,7 +33,7 @@ namespace BidingManagementSystem.Api.Controllers
 		//POST /api/tenders → Create a new tender(Procurement officer)
 		[Authorize(Roles = "ProcurementOfficer")]
 		[HttpPost]
-		public async Task<IActionResult> CreateTender([FromBody] TenderDto tenderDto)
+		public async Task<IActionResult> CreateTender([FromBody] CreateTenderDto tenderDto)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -112,7 +112,7 @@ namespace BidingManagementSystem.Api.Controllers
 		//PUT /api/tenders/{id} → Update a tender (Procurement officer)
 		[Authorize(Roles = "ProcurementOfficer")]
 		[HttpPut("{tenderId}")]
-		public async Task<IActionResult> UpdateTender(int tenderId, [FromBody] TenderDto tenderDto)
+		public async Task<IActionResult> UpdateTender(int tenderId, [FromBody] CreateTenderDto tenderDto)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -162,7 +162,7 @@ namespace BidingManagementSystem.Api.Controllers
 
 		//POST /api/tenders/{id}/documents → Upload a tender document
 		[Authorize(Roles = "ProcurementOfficer")]
-		[HttpPost("{tenderId}/documents")]
+		[HttpPost("{tenderId}/document")]
 		public async Task<IActionResult> UploadTenderDocument(int tenderId, IFormFile file)
 		{
 			if (file == null || file.Length == 0)
@@ -189,7 +189,7 @@ namespace BidingManagementSystem.Api.Controllers
 		}
 
 		//TODO: update(replace) doc path
-		[HttpPut("documents/{docId}")]
+		[HttpPut("document/{docId}")]
 		public async Task<IActionResult> UpdateTenderDocument(int docId, IFormFile file)//TODO path not file
 		{
 			if (file == null || file.Length == 0)

@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 
 namespace BidingManagementSystem.Application.Commands.Bid.DeleteBidDocumentAsync
 {
-	public record DeleteBidDocumentCommand(int BidId, int docId) : IRequest<(bool Success, string ErrorMessage)>;
+	public record DeleteBidDocumentCommand(int docId) : IRequest<(bool Success, string ErrorMessage)>;
 }

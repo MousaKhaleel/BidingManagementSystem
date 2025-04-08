@@ -24,6 +24,22 @@ namespace BidingManagementSystem.Application.Commands.Tender.DeleteTenderDocumen
 				return (false, "Tender document not found");
 			}
 
+			if (File.Exists(tenderDocument.DocumentPath))
+			{
+				try
+				{
+					File.Delete(tenderDocument.DocumentPath); // Delete the file
+				}
+				catch (Exception ex)
+				{
+					return (false, $"Error deleting file: {ex.Message}");
+				}
+			}
+			else
+			{
+				return (false, "Document file not found on the server");
+			}
+
 			await _unitOfWork.tenderDocumentRepository.DeleteAsync(tenderDocument);
 			await _unitOfWork.SaveChangesAsync();
 

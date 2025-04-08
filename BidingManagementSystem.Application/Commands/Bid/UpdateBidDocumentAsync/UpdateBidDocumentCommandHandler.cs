@@ -18,8 +18,12 @@ namespace BidingManagementSystem.Application.Commands.Bid.UpdateBidDocumentAsync
 			_unitOfWork = unitOfWork;
 		}
 		public async Task<(bool Success, string ErrorMessage)> Handle(UpdateBidDocumentCommand request, CancellationToken cancellationToken)
-		{//TODO
+		{
 			var document = await _unitOfWork.bidDocumentRepository.GetByIdAsync(request.docId);
+			if (document == null)
+			{
+				return (false, "Tender document not found");
+			}
 
 			var filePath = Path.Combine("BidDocuments", $"{document.BidDocumentId}_{request.file.FileName}");
 			using (var stream = new FileStream(filePath, FileMode.Create))

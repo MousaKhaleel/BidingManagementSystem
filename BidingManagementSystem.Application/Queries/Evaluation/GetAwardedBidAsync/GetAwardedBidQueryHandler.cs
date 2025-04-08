@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BidingManagementSystem.Application.Queries.Evaluation.GetAwardedBidAsync
 {
-	public class GetAwardedBidQueryHandler : IRequestHandler<GetAwardedBidQuery, BidDto>
+	public class GetAwardedBidQueryHandler : IRequestHandler<GetAwardedBidQuery, GetBidDto>
 	{
 		private readonly IUnitOfWork _unitOfWork;
 
@@ -17,19 +17,18 @@ namespace BidingManagementSystem.Application.Queries.Evaluation.GetAwardedBidAsy
 		{
 			_unitOfWork = unitOfWork;
 		}
-		public async Task<BidDto> Handle(GetAwardedBidQuery request, CancellationToken cancellationToken)
+		public async Task<GetBidDto> Handle(GetAwardedBidQuery request, CancellationToken cancellationToken)
 		{
 			var awardedBid = await _unitOfWork.bidRepository.GetAwardedBidAsync(request.tenderId);
 			if (awardedBid == null)
 			{
 				throw new Exception("No awarded bid found for the given tender ID.");
 			}
-			var bidDto = new BidDto
+			var bidDto = new GetBidDto
 			{
 				TenderId = awardedBid.TenderId,
 				BidderId = awardedBid.BidderId,
 				Amount = awardedBid.Amount,
-				Status = awardedBid.Status,
 			};
 			return bidDto;
 		}

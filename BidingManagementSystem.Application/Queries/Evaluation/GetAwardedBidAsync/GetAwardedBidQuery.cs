@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace BidingManagementSystem.Application.Queries.Evaluation.GetAwardedBidAsync
 {
-    public record GetAwardedBidQuery(int tenderId) : IRequest<BidDto>;
+    public record GetAwardedBidQuery(int tenderId) : IRequest<GetBidDto>;
 }
