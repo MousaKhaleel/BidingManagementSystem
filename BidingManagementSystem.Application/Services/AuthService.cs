@@ -48,27 +48,33 @@ namespace BidingManagementSystem.Application.Services
 		public async Task<string> GenerateJwtTokenString(User user)
 		{
 			var roles = await _userManager.GetRolesAsync(user);
+
 			IEnumerable<Claim> claims = new List<Claim>
 	{
-		new Claim(ClaimTypes.Email, user.UserName),
-		new Claim(ClaimTypes.Role, roles.FirstOrDefault()),
-    };
+		new Claim(ClaimTypes.NameIdentifier, user.Id),
+		new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
+		new Claim(ClaimTypes.Role, roles.FirstOrDefault() ?? string.Empty)
+	};
 
-			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt:Key").Value));
+			var key = new SymmetricSecurityKey(
+				Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])
+			);
 
 			var token = new JwtSecurityToken(
 				claims: claims,
 				expires: DateTime.UtcNow.AddMinutes(600),
-				issuer: _configuration.GetSection("Jwt:Issuer").Value,
-				audience: _configuration.GetSection("Jwt:Audience").Value,
+				issuer: _configuration["Jwt:Issuer"],
+				audience: _configuration["Jwt:Audience"],
 				signingCredentials: new SigningCredentials(
 					key,
-					SecurityAlgorithms.HmacSha256Signature)
+					SecurityAlgorithms.HmacSha256Signature
+				)
 			);
 
 			string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 			return tokenString;
 		}
+
 
 		public async Task<User> GetProfileAsync()
 		{

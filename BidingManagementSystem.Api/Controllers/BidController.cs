@@ -2,7 +2,9 @@
 using BidingManagementSystem.Application.Commands.Bid.DeleteBidDocumentAsync;
 using BidingManagementSystem.Application.Commands.Bid.SubmitBid;
 using BidingManagementSystem.Application.Commands.Bid.UpdateBidAsync;
-using BidingManagementSystem.Application.Commands.Bid.UploadBidDocumentsAsync;
+using BidingManagementSystem.Application.Commands.Bid.UpdateBidDocumentAsync;
+using BidingManagementSystem.Application.Commands.Bid.UploadBidDocumentAsync;
+using BidingManagementSystem.Application.Commands.Tender.UpdateTenderDocumentAsync;
 using BidingManagementSystem.Application.Dtos;
 using BidingManagementSystem.Application.Interfaces;
 using BidingManagementSystem.Application.Queries.Bid.GetBidByIdAsync;
@@ -151,7 +153,7 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 			try
 			{
-				var command = new UploadBidDocumentsCommand(bidId, files);
+				var command = new UploadBidDocumentCommand(bidId, files);
 
 				var result = await _mediator.Send(command);
 				if (result.Success)
@@ -168,6 +170,31 @@ namespace BidingManagementSystem.Api.Controllers
 		}
 
 		//TODO: update(replace) doc
+		[HttpPut("documents/{docId}")]
+		public async Task<IActionResult> UpdateBidDocument(int docId, IFormFile file)//TODO path not file
+		{
+			if (file == null || file.Length == 0)
+			{
+				return BadRequest("No file uploaded");
+			}
+
+			try
+			{
+				var command = new UpdateBidDocumentCommand(docId, file);
+
+				var result = await _mediator.Send(command);
+				if (result.Success)
+				{
+					return Ok("Document updated successfully");
+				}
+
+				return BadRequest(result.ErrorMessage);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
 
 		//GET / api / tenders /{ id}/ bids /{ bidId}/ documents → Get bid documents
 		[Authorize(Roles = "Bidder, ProcurementOfficer")]

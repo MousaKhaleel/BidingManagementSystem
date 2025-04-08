@@ -20,7 +20,7 @@ namespace BidingManagementSystem.Api.Controllers
 		{
 			_mediator = mediator;
 		}
-		//TODO convert to cqrs
+
 		[HttpPost("Category")]
 		public async Task<IActionResult> AddCategory([FromBody] CategoryDto categoryDto)
 		{

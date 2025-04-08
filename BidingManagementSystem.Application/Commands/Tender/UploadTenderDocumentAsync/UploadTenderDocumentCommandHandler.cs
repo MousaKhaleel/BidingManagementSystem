@@ -1,4 +1,5 @@
 ﻿using BidingManagementSystem.Domain.Interfaces;
+using BidingManagementSystem.Domain.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,31 @@ namespace BidingManagementSystem.Application.Commands.Tender.UploadTenderDocumen
 		{
 			_unitOfWork = unitOfWork;
 		}
-		public Task<(bool Success, string ErrorMessage)> Handle(UploadTenderDocumentCommand request, CancellationToken cancellationToken)
+		public async Task<(bool Success, string ErrorMessage)> Handle(UploadTenderDocumentCommand request, CancellationToken cancellationToken)
 		{
-			//TODO
-			throw new NotImplementedException();
+			var tender = await _unitOfWork.tenderRepository.GetByIdAsync(request.tenderId);
+			if (tender == null)
+			{
+				return (false, "Tender not found");
+			}
+
+			var filePath = Path.Combine("TenderDocuments", $"{tender.TenderId}_{request.file.FileName}");
+			using (var stream = new FileStream(filePath, FileMode.Create))
+			{
+				await request.file.CopyToAsync(stream);
+			}
+
+			var document = new TenderDocument
+			{
+				DocumentPath = filePath,
+				DocumentName = request.file.FileName,
+				TenderId = request.tenderId
+			};
+
+			await _unitOfWork.tenderDocumentRepository.AddAsync(document);
+			await _unitOfWork.SaveChangesAsync();
+
+			return (true, null);
 		}
 	}
 }
