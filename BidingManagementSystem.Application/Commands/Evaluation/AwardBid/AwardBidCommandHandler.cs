@@ -31,6 +31,16 @@ namespace BidingManagementSystem.Application.Commands.Evaluation.AwardBid
 				bid.Status = BidStatus.Accepted;
 				await _unitOfWork.bidRepository.UpdateAsync(bid);
 
+			var bids = await _unitOfWork.bidRepository.GetBidsByTenderIdAsync(bid.TenderId);
+			foreach (var b in bids)
+			{
+				if (b.BidderId != bid.BidderId)
+				{
+					b.Status = BidStatus.Rejected;
+					await _unitOfWork.bidRepository.UpdateAsync(b);
+				}
+			}
+
 			var tender = await _unitOfWork.tenderRepository.GetByIdAsync(bid.TenderId);
 			tender.Status = TenderStatus.Awarded;
 			await _unitOfWork.tenderRepository.UpdateAsync(tender);
