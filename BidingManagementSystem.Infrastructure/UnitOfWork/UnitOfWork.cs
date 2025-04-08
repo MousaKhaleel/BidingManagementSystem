@@ -13,7 +13,7 @@ namespace BidingManagementSystem.Infrastructure.UnitOfWork
 	public class UnitOfWork : IUnitOfWork
 	{
 		private readonly ApplicationDbContext _context;
-
+		//TODO split read and write repos
 		public ITenderRepository tenderRepository { get; private set; }
 		public IBidRepository bidRepository { get; private set; }
 		public IGenericRepository<User> userRepository { get; private set; }

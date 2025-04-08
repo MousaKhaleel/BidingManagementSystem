@@ -6,7 +6,6 @@ using BidingManagementSystem.Application.Commands.Bid.UpdateBidDocumentAsync;
 using BidingManagementSystem.Application.Commands.Bid.UploadBidDocumentAsync;
 using BidingManagementSystem.Application.Commands.Tender.UpdateTenderDocumentAsync;
 using BidingManagementSystem.Application.Dtos;
-using BidingManagementSystem.Application.Interfaces;
 using BidingManagementSystem.Application.Queries.Bid.GetBidByIdAsync;
 using BidingManagementSystem.Application.Queries.Bid.GetBidDocumentsAsync;
 using BidingManagementSystem.Application.Queries.Bid.GetBidsByTenderIdAsync;

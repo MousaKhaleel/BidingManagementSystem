@@ -1,5 +1,11 @@
-﻿using BidingManagementSystem.Application.Dtos;
-using BidingManagementSystem.Application.Interfaces;
+﻿using BidingManagementSystem.Application.Commands.Auth.ChangeUserPasswordAsync;
+using BidingManagementSystem.Application.Commands.Auth.LoginUserAsync;
+using BidingManagementSystem.Application.Commands.Auth.LogoutUserAsync;
+using BidingManagementSystem.Application.Commands.Auth.RegisterUserAsync;
+using BidingManagementSystem.Application.Dtos;
+using BidingManagementSystem.Application.Queries.Auth.GenerateJwtTokenStringAsync;
+using BidingManagementSystem.Application.Queries.Auth.GetUserProfileAsync;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +16,11 @@ namespace BidingManagementSystem.Api.Controllers
 	[ApiController]
 	public class AuthController : ControllerBase
 	{
-		private readonly IAuthService _authService;
+		private readonly IMediator _mediator;
 
-		public AuthController(IAuthService authService)
+		public AuthController(IMediator mediator)
 		{
-			_authService = authService;
+			_mediator = mediator;
 		}
 
 		[HttpPost("register")]
@@ -26,8 +32,9 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 			try
 			{
-				var result = await _authService.RegisterAsync(registerDto);
+				var command = new RegisterUserCommand(registerDto);
 
+				var result = await _mediator.Send(command);
 				if (result.Success)
 				{
 					return Ok("Registered successfully");
@@ -45,11 +52,15 @@ namespace BidingManagementSystem.Api.Controllers
 		{
 			try
 			{
-				var result = await _authService.LoginAsync(loginDto);
+				var command = new LoginUserCommand(loginDto);
+
+				var result = await _mediator.Send(command);
 				if (result.Success)
 				{
-					var tokinString = _authService.GenerateJwtTokenString(result.user);
-					return Ok("Login successful, tokin: " + tokinString.Result);
+					var tokinCommand = new GenerateJwtTokenStringQuery(result.user);
+
+					var tokinString = await _mediator.Send(tokinCommand);
+					return Ok("Login successful, tokin: " + tokinString);
 				}
 				return BadRequest(result.ErrorMessage);
 			}
@@ -65,7 +76,9 @@ namespace BidingManagementSystem.Api.Controllers
 		{
 			try
 			{
-				await _authService.LogoutAsync();
+				var command = new LogoutUserCommand();
+
+				await _mediator.Send(command);
 				return Ok("Succses");
 			}
 			catch (Exception ex)
@@ -80,7 +93,9 @@ namespace BidingManagementSystem.Api.Controllers
 		{
 			try
 			{
-				var result = await _authService.GetProfileAsync();
+				var query = new GetUserProfileQuery();
+
+				var result = await _mediator.Send(query);
 				return Ok(result);
 			}
 			catch (Exception ex)
@@ -98,7 +113,9 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 			try
 			{
-				var result = await _authService.ChangePasswordAsync(password);
+				var command = new ChangeUserPasswordCommand(password);
+
+				var result = await _mediator.Send(command);
 				return Ok(result);
 			}
 			catch (Exception ex)
