@@ -15,6 +15,7 @@ using BidingManagementSystem.Application.Commands.Tender.DeleteTender;
 using BidingManagementSystem.Application.Commands.Tender.DeleteTenderDocumentAsync;
 using BidingManagementSystem.Application.Commands.Tender.UpdateTender;
 using BidingManagementSystem.Application.Commands.Tender.UploadTenderDocumentAsync;
+using BidingManagementSystem.Application.Notifications;
 using BidingManagementSystem.Application.Queries.Auth.GenerateJwtTokenStringAsync;
 using BidingManagementSystem.Application.Queries.Auth.GetUserProfileAsync;
 using BidingManagementSystem.Application.Queries.Bid.GetBidByIdAsync;
@@ -176,6 +177,8 @@ builder.Services.AddMediatR(configuration =>
 });
 
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddTransient<INotificationService, NotificationService>();
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ITenderRepository, TenderRepository>();

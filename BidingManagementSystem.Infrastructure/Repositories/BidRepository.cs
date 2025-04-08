@@ -21,13 +21,28 @@ namespace BidingManagementSystem.Infrastructure.Repositories
 
 		public async Task<Bid> GetAwardedBidAsync(int tenderId)
 		{
-			var award = await _context.Awards.Where(x=>x.TenderId == tenderId).FirstOrDefaultAsync();
+			var award = await _context.Awards.Where(x => x.TenderId == tenderId).FirstOrDefaultAsync();
 			return await _context.Bids.Where(x => x.BidId == award.WinningBidId).FirstOrDefaultAsync();
+		}
+
+		public async Task<Bid> GetBidByIdAsync(int id)
+		{
+			return await _context.Bids.Include(x => x.Tender).Include(b => b.Documents).Include(b => b.Bidder).FirstOrDefaultAsync(x => x.BidId == id);
 		}
 
 		public async Task<IEnumerable<Bid>> GetBidsByTenderIdAsync(int tenderId)
 		{
-			return await _context.Bids.Include(b => b.Documents).Include(b => b.Bidder).Where(b => b.TenderId == tenderId).ToListAsync();
+			return await _context.Bids.Include(x => x.Tender).Include(b => b.Documents).Include(b => b.Bidder).Where(b => b.TenderId == tenderId).ToListAsync();
+		}
+
+		public async Task<Bid> GetLowestBidByTenderIdAsync(int tenderId)
+		{
+			return await _context.Bids
+								.Include(b => b.Documents)
+								.Include(b => b.Bidder)
+								.Where(x => x.TenderId == tenderId)
+								.OrderBy(x => x.Amount)
+								.FirstOrDefaultAsync();
 		}
 	}
 }

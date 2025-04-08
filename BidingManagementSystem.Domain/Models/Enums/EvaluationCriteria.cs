@@ -11,6 +11,7 @@ namespace BidingManagementSystem.Domain.Models.Enums
 		Price,
 		ViabilityStudy,
 		PastExperience,
-		Compliance
+		Compliance,
+		LowestBid
 	}
 }
