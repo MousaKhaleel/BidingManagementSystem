@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace BidingManagementSystem.Application.Commands.Tender.CreateTender
 {
-    public record CreateTenderCommand(TenderDto tenderDto) : IRequest<(bool Success, string ErrorMessage)>;
+    public record CreateTenderCommand(CreateTenderDto tenderDto) : IRequest<(bool Success, string ErrorMessage)>;
 }

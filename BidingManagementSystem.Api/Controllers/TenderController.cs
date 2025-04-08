@@ -33,7 +33,7 @@ namespace BidingManagementSystem.Api.Controllers
 		//POST /api/tenders → Create a new tender(Procurement officer)
 		[Authorize(Roles = "ProcurementOfficer")]
 		[HttpPost]
-		public async Task<IActionResult> CreateTender([FromBody] TenderDto tenderDto)
+		public async Task<IActionResult> CreateTender([FromBody] CreateTenderDto tenderDto)
 		{
 			if (!ModelState.IsValid)
 			{
