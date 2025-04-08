@@ -1,4 +1,5 @@
 ﻿using BidingManagementSystem.Domain.Models;
+using BidingManagementSystem.Infrastructure.Data.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -26,37 +27,25 @@ namespace BidingManagementSystem.Infrastructure.Data
 		{
 			base.OnModelCreating(modelBuilder);
 
+			modelBuilder.ApplyConfiguration(new BidConfiguration());//TODO move the rest to configs
+
 			modelBuilder.Entity<TenderCategory>()
 				.HasKey(tc => new { tc.TenderId, tc.CategoryId });
 
-			modelBuilder.Entity<Bid>()
-			.Property(e => e.CreateDate)
-			.HasDefaultValueSql("GETDATE()");
-
-			modelBuilder.Entity<BidDocument>()
-						.Property(e => e.CreateDate)
-						.HasDefaultValueSql("GETDATE()");
 
 			modelBuilder.Entity<Tender>()
 						.Property(e => e.IssueDate)
 						.HasDefaultValueSql("GETDATE()");
 
+
+			modelBuilder.Entity<Tender>()
+				.HasOne(t => t.Evaluation)
+				.WithOne(e => e.Tender)
+				.HasForeignKey<Tender>(t => t.EvaluationId);
+
 			modelBuilder.Entity<TenderDocument>()
 						.Property(e => e.CreateDate)
 						.HasDefaultValueSql("GETDATE()");
-
-
-			modelBuilder.Entity<Bid>()
-				.HasOne(b => b.Bidder)
-				.WithMany(u => u.Bids)
-				.HasForeignKey(b => b.BidderId)
-				.OnDelete(DeleteBehavior.Restrict); ;
-
-			modelBuilder.Entity<Bid>()
-				.HasOne(b => b.Tender)
-				.WithMany(t => t.Bids)
-				.HasForeignKey(b => b.TenderId)
-				.OnDelete(DeleteBehavior.Restrict);
 
 			modelBuilder.Entity<TenderDocument>()
 				.HasOne(td => td.Tender)
@@ -65,17 +54,19 @@ namespace BidingManagementSystem.Infrastructure.Data
 				.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<BidDocument>()
+						.Property(e => e.CreateDate)
+						.HasDefaultValueSql("GETDATE()");
+
+			modelBuilder.Entity<BidDocument>()
 				.HasOne(bd => bd.Bid)
 				.WithMany(b => b.Documents)
 				.HasForeignKey(bd => bd.BidId)
 				.OnDelete(DeleteBehavior.Cascade);
 
-			modelBuilder.Entity<Tender>()
-				.HasOne(t => t.Evaluation)
-				.WithOne(e => e.Tender)
-				.HasForeignKey<Tender>(t => t.EvaluationId);
+
 
 			modelBuilder.Entity<User>().ToTable("Users");
+
 
 			modelBuilder.Entity<User>().Ignore(v => v.EmailConfirmed);
 			modelBuilder.Entity<User>().Ignore(v => v.SecurityStamp);

@@ -2,7 +2,7 @@ using BidingManagementSystem.Application.Commands.Bid.DeleteBidAsync;
 using BidingManagementSystem.Application.Commands.Bid.DeleteBidDocumentAsync;
 using BidingManagementSystem.Application.Commands.Bid.SubmitBid;
 using BidingManagementSystem.Application.Commands.Bid.UpdateBidAsync;
-using BidingManagementSystem.Application.Commands.Bid.UploadBidDocumentsAsync;
+using BidingManagementSystem.Application.Commands.Bid.UploadBidDocumentAsync;
 using BidingManagementSystem.Application.Commands.Category.AddCategoryAsync;
 using BidingManagementSystem.Application.Commands.Evaluation.AwardBid;
 using BidingManagementSystem.Application.Commands.Evaluation.EvaluateBid;
@@ -131,7 +131,7 @@ builder.Services.AddMediatR(configuration =>
 	configuration.RegisterServicesFromAssembly(typeof(DeleteBidDocumentCommandHandler).Assembly);
 	configuration.RegisterServicesFromAssembly(typeof(SubmitBidCommandHandler).Assembly);
 	configuration.RegisterServicesFromAssembly(typeof(UpdateBidCommandHandler).Assembly);
-	configuration.RegisterServicesFromAssembly(typeof(UploadBidDocumentsCommandHandler).Assembly);
+	configuration.RegisterServicesFromAssembly(typeof(UploadBidDocumentCommandHandler).Assembly);
 
 	configuration.RegisterServicesFromAssembly(typeof(AddCategoryCommandHandler).Assembly);
 

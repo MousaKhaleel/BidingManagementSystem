@@ -89,7 +89,7 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 		[Authorize]
-		[HttpPut("ChangePassword")]
+		[HttpPut("ResetPassword")]
 		public async Task<IActionResult> ChangePassword(string password)
 		{
 			if (password == null)
@@ -106,6 +106,5 @@ namespace BidingManagementSystem.Api.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
-		//TODO reset password
 	}
 }

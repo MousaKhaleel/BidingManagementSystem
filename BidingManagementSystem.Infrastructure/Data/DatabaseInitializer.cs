@@ -51,7 +51,7 @@ namespace BidingManagementSystem.Infrastructure.Data
 		private async Task SeedRolesAsync(IServiceProvider services)
 		{
 			var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-			var roles = new[] { "Admin", "ProcurementOfficer", "Bidder", "Evaluator" };//TODO
+			var roles = new[] { "Admin", "ProcurementOfficer", "Bidder", "Evaluator" };
 
 			foreach (var role in roles)
 			{
@@ -66,7 +66,7 @@ namespace BidingManagementSystem.Infrastructure.Data
 		{
 			var userManager = services.GetRequiredService<UserManager<User>>();
 			var email = "Admin@adm.com";
-			var password = "admin1234";
+			var password = "Admin1234";
 
 			if (await userManager.FindByEmailAsync(email) == null)
 			{
