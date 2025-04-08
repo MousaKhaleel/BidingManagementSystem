@@ -34,16 +34,16 @@ namespace BidingManagementSystem.Api.Controllers
 
 		//			POST / api / tenders /{ id}/ bids → Submit a bid for a tender
 		[Authorize(Roles = "Bidder")]
-		[HttpPost("submit")]
-		public async Task<IActionResult> SubmitBid(int bidderId, [FromBody] BidDto bidDto)
+		[HttpPost("{tenderId}/submit")]
+		public async Task<IActionResult> SubmitBid(int tenderId, [FromBody] BidDto bidDto)
 		{
-			if (!ModelState.IsValid)
-			{
-				return BadRequest("Failed: " + ModelState);
-			}
+			//if (!ModelState.IsValid)
+			//{
+			//	return BadRequest("Failed: " + ModelState);
+			//}
 			try
 			{
-				var command = new SubmitBidCommand(bidderId, bidDto);
+				var command = new SubmitBidCommand(tenderId, bidDto);
 
 				var result = await _mediator.Send(command);
 				if (result.Success)
@@ -78,7 +78,7 @@ namespace BidingManagementSystem.Api.Controllers
 		}
 
 		//GET / api / tenders /{ id}/ bids /{ bidId} → Get bid details
-		[HttpGet("bids/{bidId}")]
+		[HttpGet("{bidId}")]
 		public async Task<IActionResult> GetBidById(int bidId)
 		{
 			try
@@ -95,8 +95,8 @@ namespace BidingManagementSystem.Api.Controllers
 		}
 
 		//PUT / api / tenders /{ id}/ bids /{ bidId} → Modify bid before submission deadline
-		[HttpPut("bids/{bidId}")]
-		public async Task<IActionResult> UpdateBid(int bidId, [FromBody] BidDto bidDto)
+		[HttpPut("{bidId}")]
+		public async Task<IActionResult> UpdateBid(int bidId, [FromBody] UpdateBidDto bidDto)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -121,7 +121,7 @@ namespace BidingManagementSystem.Api.Controllers
 		}
 
 		//DELETE / api / tenders /{ id}/ bids /{ bidId} → Withdraw a bid
-		[HttpDelete("bids/{bidId}")]
+		[HttpDelete("{bidId}")]
 		public async Task<IActionResult> DeleteBid(int bidId)
 		{
 			try
@@ -144,7 +144,7 @@ namespace BidingManagementSystem.Api.Controllers
 
 		//Bid Attachments
 		//POST / api / tenders /{ id}/ bids /{ bidId}/ documents → Upload bid documents
-		[HttpPost("bids/{bidId}/documents")]
+		[HttpPost("{bidId}/document")]
 		public async Task<IActionResult> UploadBidDocuments(int bidId, IFormFileCollection files)
 		{
 			if (!ModelState.IsValid)
@@ -170,7 +170,7 @@ namespace BidingManagementSystem.Api.Controllers
 		}
 
 		//TODO: update(replace) doc
-		[HttpPut("documents/{docId}")]
+		[HttpPut("document/{docId}")]
 		public async Task<IActionResult> UpdateBidDocument(int docId, IFormFile file)//TODO path not file
 		{
 			if (file == null || file.Length == 0)
@@ -198,7 +198,7 @@ namespace BidingManagementSystem.Api.Controllers
 
 		//GET / api / tenders /{ id}/ bids /{ bidId}/ documents → Get bid documents
 		[Authorize(Roles = "Bidder, ProcurementOfficer")]
-		[HttpGet("bids/{bidId}/documents")]
+		[HttpGet("{bidId}/documents")]
 		public async Task<IActionResult> GetBidDocuments(int bidId)
 		{
 			try
@@ -215,12 +215,12 @@ namespace BidingManagementSystem.Api.Controllers
 		}
 
 		//DELETE / api / tenders /{ id}/ bids /{ bidId}/ documents /{ docId} → Remove a bid document
-		[HttpDelete("bids/{bidId}/documents/{docId}")]
-		public async Task<IActionResult> DeleteBidDocument(int bidId, int docId)
+		[HttpDelete("documents/{docId}")]
+		public async Task<IActionResult> DeleteBidDocument(int docId)
 		{
 			try
 			{
-				var command = new DeleteBidDocumentCommand(bidId, docId);
+				var command = new DeleteBidDocumentCommand(docId);
 
 				var result = await _mediator.Send(command);
 				if (result.Success)

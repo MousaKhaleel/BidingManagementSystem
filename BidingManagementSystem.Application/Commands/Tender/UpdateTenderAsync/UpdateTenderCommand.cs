@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace BidingManagementSystem.Application.Commands.Tender.UpdateTender
 {
-    public record UpdateTenderCommand(int tenderId, TenderDto tenderDto) : IRequest<(bool Success, string ErrorMessage)>;
+    public record UpdateTenderCommand(int tenderId, CreateTenderDto tenderDto) : IRequest<(bool Success, string ErrorMessage)>;
 }

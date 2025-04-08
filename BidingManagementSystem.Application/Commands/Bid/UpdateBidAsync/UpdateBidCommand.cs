@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace BidingManagementSystem.Application.Commands.Bid.UpdateBidAsync
 {
-	public record UpdateBidCommand(int bidId, BidDto bidDto) : IRequest<(bool Success, string ErrorMessage)>;
+	public record UpdateBidCommand(int bidId, UpdateBidDto bidDto) : IRequest<(bool Success, string ErrorMessage)>;
 }

@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace BidingManagementSystem.Application.Commands.Bid.SubmitBid
 {
-    public record SubmitBidCommand(int bidderId, BidDto bidDto) : IRequest<(bool Success, string ErrorMessage)>;
+    public record SubmitBidCommand(int tenderId, BidDto bidDto) : IRequest<(bool Success, string ErrorMessage)>;
 }

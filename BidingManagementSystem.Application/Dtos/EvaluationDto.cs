@@ -13,8 +13,5 @@ namespace BidingManagementSystem.Application.Dtos
 	{
 		public decimal Score { get; set; }
 		public EvaluationCriteria Criteria { get; set; }
-		public int BidId { get; set; }
-		public int TenderId { get; set; }
-		public string EvaluatorId { get; set; }
 	}
 }

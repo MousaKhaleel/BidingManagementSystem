@@ -29,7 +29,9 @@ namespace BidingManagementSystem.Application.Commands.Tender.CreateTender
 			{
 				if (request.tenderDto == null)
 					return (false, "Tender data is required.");
+
 				var userId = _userManager.GetUserId(_httpContextAccessor.HttpContext.User);
+
 				var tender = new Domain.Models.Tender
 				{
 					Title = request.tenderDto.Title,
@@ -41,6 +43,7 @@ namespace BidingManagementSystem.Application.Commands.Tender.CreateTender
 					EligibilityCriteria = request.tenderDto.EligibilityCriteria,
 				};
 				await _unitOfWork.tenderRepository.AddAsync(tender);
+				await _unitOfWork.SaveChangesAsync();
 				return (true, string.Empty);
 			}
 			catch (Exception ex)

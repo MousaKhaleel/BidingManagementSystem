@@ -18,7 +18,7 @@ namespace BidingManagementSystem.Application.Commands.Bid.UploadBidDocumentAsync
 			_unitOfWork = unitOfWork;
 		}
 		public async Task<(bool Success, string ErrorMessage)> Handle(UploadBidDocumentCommand request, CancellationToken cancellationToken)
-		{//TODO
+		{
 			var bid = await _unitOfWork.bidRepository.GetByIdAsync(request.bidId);
 			if (bid == null)
 			{
@@ -29,11 +29,23 @@ namespace BidingManagementSystem.Application.Commands.Bid.UploadBidDocumentAsync
 			{
 				if (file.Length > 0)
 				{
-					var filePath = Path.Combine("uploads", file.FileName);
+					// Create the directory if it doesn't exist
+					var directoryPath = Path.Combine("BidDocuments");
+					if (!Directory.Exists(directoryPath))
+					{
+						Directory.CreateDirectory(directoryPath);
+					}
+
+					// Construct the file path
+					var filePath = Path.Combine(directoryPath, $"{bid.BidId}_{file.FileName}");
+
+					// Save the file to the specified path
 					using (var stream = new FileStream(filePath, FileMode.Create))
 					{
 						await file.CopyToAsync(stream);
 					}
+
+					// Create a new BidDocument object and save it to the database
 					var bidDocument = new BidDocument
 					{
 						BidId = request.bidId,
@@ -44,6 +56,7 @@ namespace BidingManagementSystem.Application.Commands.Bid.UploadBidDocumentAsync
 				}
 			}
 
+			// Save changes to the database
 			await _unitOfWork.SaveChangesAsync();
 
 			return (true, null);

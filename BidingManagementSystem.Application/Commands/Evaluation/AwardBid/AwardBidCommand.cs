@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 
 namespace BidingManagementSystem.Application.Commands.Evaluation.AwardBid
 {
-	public record AwardBidCommand(int TenderId, int BidId): IRequest<(bool Success, string ErrorMessage)>;
+	public record AwardBidCommand(int BidId): IRequest<(bool Success, string ErrorMessage)>;
 }

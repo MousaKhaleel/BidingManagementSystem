@@ -20,18 +20,18 @@ namespace BidingManagementSystem.Application.Commands.Evaluation.AwardBid
 		}
 		public async Task<(bool Success, string ErrorMessage)> Handle(AwardBidCommand request, CancellationToken cancellationToken)
 		{
+			var bid = await _unitOfWork.bidRepository.GetByIdAsync(request.BidId);
 			var award = new Award
 			{
-				TenderId = request.TenderId,
+				TenderId = bid.TenderId,
 				WinningBidId = request.BidId,
 			};
 			await _unitOfWork.awardRepository.AddAsync(award);
 
-			var bid = await _unitOfWork.bidRepository.GetByIdAsync(request.BidId);
 				bid.Status = BidStatus.Accepted;
 				await _unitOfWork.bidRepository.UpdateAsync(bid);
 
-			var tender = await _unitOfWork.tenderRepository.GetByIdAsync(request.TenderId);
+			var tender = await _unitOfWork.tenderRepository.GetByIdAsync(bid.TenderId);
 			tender.Status = TenderStatus.Awarded;
 			await _unitOfWork.tenderRepository.UpdateAsync(tender);
 

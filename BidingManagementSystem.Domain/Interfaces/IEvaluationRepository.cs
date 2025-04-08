@@ -9,5 +9,6 @@ namespace BidingManagementSystem.Domain.Interfaces
 {
 	public interface IEvaluationRepository : IGenericRepository<Evaluation>
 	{
+		Task<Evaluation> GetEvaluationByBidIdAsync(int bidId);
 	}
 }

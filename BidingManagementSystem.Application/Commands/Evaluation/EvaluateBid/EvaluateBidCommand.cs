@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace BidingManagementSystem.Application.Commands.Evaluation.EvaluateBid
 {
-	public record EvaluateBidCommand(int TenderId, int BidId, EvaluationDto Evaluation): IRequest<(bool Success, string ErrorMessage)>;
+	public record EvaluateBidCommand(int BidId, EvaluationDto EvaluationDto): IRequest<(bool Success, string ErrorMessage)>;
 }
