@@ -31,7 +31,6 @@ namespace BidingManagementSystem.Api.Controllers
 			_mediator = mediator;
 		}
 
-		//			POST / api / tenders /{ id}/ bids → Submit a bid for a tender
 		[Authorize(Roles = "Bidder")]
 		[HttpPost("{tenderId}/submit")]
 		public async Task<IActionResult> SubmitBid(int tenderId, [FromBody] BidDto bidDto)
@@ -58,7 +57,6 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//GET / api / tenders /{ id}/ bids → Get all bids for a tender (Procurement officer)
 		[Authorize(Roles = "Bidder, ProcurementOfficer")]
 		[HttpGet("tender/{tenderId}/bids")]
 		public async Task<IActionResult> GetBidsByTenderId(int tenderId)
@@ -76,7 +74,6 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//GET / api / tenders /{ id}/ bids /{ bidId} → Get bid details
 		[HttpGet("{bidId}")]
 		public async Task<IActionResult> GetBidById(int bidId)
 		{
@@ -93,7 +90,6 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//PUT / api / tenders /{ id}/ bids /{ bidId} → Modify bid before submission deadline
 		[HttpPut("{bidId}")]
 		public async Task<IActionResult> UpdateBid(int bidId, [FromBody] UpdateBidDto bidDto)
 		{
@@ -119,7 +115,6 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//DELETE / api / tenders /{ id}/ bids /{ bidId} → Withdraw a bid
 		[HttpDelete("{bidId}")]
 		public async Task<IActionResult> DeleteBid(int bidId)
 		{
@@ -141,8 +136,6 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//Bid Attachments
-		//POST / api / tenders /{ id}/ bids /{ bidId}/ documents → Upload bid documents
 		[HttpPost("{bidId}/document")]
 		public async Task<IActionResult> UploadBidDocuments(int bidId, IFormFileCollection files)
 		{
@@ -168,9 +161,8 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//TODO: update(replace) doc
 		[HttpPut("document/{docId}")]
-		public async Task<IActionResult> UpdateBidDocument(int docId, IFormFile file)//TODO path not file
+		public async Task<IActionResult> UpdateBidDocument(int docId, IFormFile file)
 		{
 			if (file == null || file.Length == 0)
 			{
@@ -195,7 +187,6 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//GET / api / tenders /{ id}/ bids /{ bidId}/ documents → Get bid documents
 		[Authorize(Roles = "Bidder, ProcurementOfficer")]
 		[HttpGet("{bidId}/documents")]
 		public async Task<IActionResult> GetBidDocuments(int bidId)
@@ -213,7 +204,6 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//DELETE / api / tenders /{ id}/ bids /{ bidId}/ documents /{ docId} → Remove a bid document
 		[HttpDelete("documents/{docId}")]
 		public async Task<IActionResult> DeleteBidDocument(int docId)
 		{

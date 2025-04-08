@@ -38,8 +38,5 @@ namespace BidingManagementSystem.Domain.Models
 		public List<TenderCategory>? TenderCategories { get; set; }
 		public List<TenderDocument>? Documents { get; set; }
 		public List<Bid>? Bids { get; set; }
-
-		//public int BidId { get; set; }
-		//public Bid? WinnerBid { get; set; }
 	}
 }

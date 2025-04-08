@@ -23,7 +23,6 @@ namespace BidingManagementSystem.Api.Controllers
 			_mediator = mediator;
 		}
 
-		//POST /api/tenders/{id}/ bids /{ bidId}/ score → Manually score bid
 		[HttpPost("bids/{bidId}/score")]
 		public async Task<IActionResult> EvaluateBid(int bidId, EvaluationDto evaluation)
 		{
@@ -50,7 +49,6 @@ namespace BidingManagementSystem.Api.Controllers
 		}
 
 
-		//GET /api/tenders/{id}/ bids /{ bidId}/ score → Get bid score
 		[HttpGet("bids/{bidId}/score")]
 		public IActionResult GetBidScore(int bidId)//TODO: move to bid(?)
 		{
@@ -68,8 +66,28 @@ namespace BidingManagementSystem.Api.Controllers
 		}
 
 		//TODO: Automated scoring system for bid comparisons. an automated scoring based on price 
+		//[Authorize(Roles = "Evaluator")]
+		//[HttpPost("Bids/{bidId}/autoEvaluate")]
+		//public async Task<IActionResult> AutoEvaluateBid(int bidId)
+		//{
+		//	try
+		//	{
+		//		var command = new AutoEvaluateBidsCommand(bidId);
+		//		var result = await _mediator.Send(command);
 
-		//POST /api/tenders/{id}/ bids /{ bidId}/ award → Select a winning bid
+		//		if (result.Success)
+		//		{
+		//			return Ok("Bids were automatically evaluated based on price.");
+		//		}
+
+		//		return BadRequest(result.ErrorMessage);
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		return BadRequest($"Error: {ex.Message}");
+		//	}
+		//}
+
 		[Authorize(Roles = "Evaluator")]
 		[HttpPost("bids/{bidId}/award")]
 		public async Task<IActionResult> AwardBid(int bidId)
@@ -96,7 +114,6 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//GET /api/tenders/{id}/ winner → Get awarded bid for a tender
 		[HttpGet("tenders/{tenderId}/winner")]
 		public IActionResult GetAwardedBid(int tenderId)
 		{

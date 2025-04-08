@@ -18,7 +18,11 @@ namespace BidingManagementSystem.Application.Commands.Category.AddCategoryAsync
 			_unitOfWork = unitOfWork;
 		}
 		public async Task<(bool Success, string ErrorMessage)> Handle(AddCategoryCommand request, CancellationToken cancellationToken)
-		{//TODO
+		{
+			if(request.categoryDto == null)
+			{
+				return (false, "CategoryDto is null");
+			}
 			var category = new Domain.Models.Category
 			{
 				Name = request.categoryDto.Name,

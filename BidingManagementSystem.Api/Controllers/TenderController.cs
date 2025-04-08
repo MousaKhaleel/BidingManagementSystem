@@ -29,7 +29,6 @@ namespace BidingManagementSystem.Api.Controllers
 			_mediator = mediator;
 		}
 
-		//POST /api/tenders → Create a new tender(Procurement officer)
 		[Authorize(Roles = "ProcurementOfficer")]
 		[HttpPost]
 		public async Task<IActionResult> CreateTender([FromBody] CreateTenderDto tenderDto)
@@ -57,7 +56,6 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//GET /api/tenders → Get all tenders
 		[HttpGet("Tenders")]
 		public async Task<IActionResult> GetAllTenders()
 		{
@@ -74,7 +72,6 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//GET /api/tenders/open → Get open tenders for bidding
 		[HttpGet("Tenders/open")]
 		public async Task<IActionResult> GetOpenTenders()
 		{
@@ -91,7 +88,6 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//GET /api/tenders/{id} → Get tender details by ID
 		[HttpGet("{tenderId}")]
 		public async Task<IActionResult> GetTenderById(int tenderId)
 		{
@@ -108,7 +104,6 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//PUT /api/tenders/{id} → Update a tender (Procurement officer)
 		[Authorize(Roles = "ProcurementOfficer")]
 		[HttpPut("{tenderId}")]
 		public async Task<IActionResult> UpdateTender(int tenderId, [FromBody] CreateTenderDto tenderDto)
@@ -135,7 +130,6 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//DELETE /api/tenders/{id} → Delete a tender (Admin or Procurement officer)
 		[Authorize(Roles = "ProcurementOfficer")]
 
 		[HttpDelete("{tenderId}")]
@@ -159,7 +153,6 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//POST /api/tenders/{id}/documents → Upload a tender document
 		[Authorize(Roles = "ProcurementOfficer")]
 		[HttpPost("{tenderId}/document")]
 		public async Task<IActionResult> UploadTenderDocument(int tenderId, IFormFile file)
@@ -187,9 +180,8 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//TODO: update(replace) doc path
 		[HttpPut("document/{docId}")]
-		public async Task<IActionResult> UpdateTenderDocument(int docId, IFormFile file)//TODO path not file
+		public async Task<IActionResult> UpdateTenderDocument(int docId, IFormFile file)
 		{
 			if (file == null || file.Length == 0)
 			{
@@ -214,7 +206,6 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//GET /api/tenders/{id}/ documents → Get tender documents
 		[HttpGet("{tenderId}/documents")]
 		public async Task<IActionResult> GetTenderDocuments(int tenderId)
 		{
@@ -231,7 +222,6 @@ namespace BidingManagementSystem.Api.Controllers
 			}
 		}
 
-		//DELETE /api/tenders/{id}/ documents /{ docId} → Remove a document
 		[Authorize(Roles = "ProcurementOfficer")]
 		[HttpDelete("documents/{docId}")]
 		public async Task<IActionResult> DeleteTenderDocument(int docId)
