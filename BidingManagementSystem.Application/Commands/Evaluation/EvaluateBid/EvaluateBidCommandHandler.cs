@@ -27,6 +27,14 @@ namespace BidingManagementSystem.Application.Commands.Evaluation.EvaluateBid
 		{
 			var bid = await _unitOfWork.bidRepository.GetByIdAsync(request.BidId);
 			var userId = _userManager.GetUserId(_httpContextAccessor.HttpContext.User);
+
+			var autoEvaluation = await _unitOfWork.evaluationRepository.GetEvaluationByBidIdAsync(request.BidId);
+			if (autoEvaluation != null)
+			{
+				autoEvaluation.Score = request.EvaluationDto.Score;
+				autoEvaluation.Criteria = request.EvaluationDto.Criteria;
+				autoEvaluation.EvaluatorId = userId;
+			}
 			var evaluation = new Domain.Models.Evaluation
 			{
 				TenderId = bid.TenderId,

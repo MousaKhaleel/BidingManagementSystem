@@ -27,7 +27,7 @@ namespace BidingManagementSystem.Domain.Models
 		public int TenderId { get; set; }
 		public Tender Tender { get; set; }
 		[ForeignKey("EvaluatorId")]
-		public string EvaluatorId { get; set; }
-		public User Evaluator { get; set; }
+		public string? EvaluatorId { get; set; }
+		public User? Evaluator { get; set; }
 	}
 }

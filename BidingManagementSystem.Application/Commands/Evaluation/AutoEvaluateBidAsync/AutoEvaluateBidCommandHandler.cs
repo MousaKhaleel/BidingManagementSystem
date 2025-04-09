@@ -38,6 +38,7 @@ namespace BidingManagementSystem.Application.Commands.Evaluation.AutoEvaluateBid
 
 			var evaluationResult = new Domain.Models.Evaluation
 			{
+				TenderId = bid.TenderId,
 				BidId = request.bidId,
 				Score = score,
 				Criteria = Domain.Models.Enums.EvaluationCriteria.LowestBid
