@@ -146,7 +146,6 @@ namespace BidingManagementSystem.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EvaluatorId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("Score")
@@ -494,9 +493,7 @@ namespace BidingManagementSystem.Infrastructure.Migrations
 
                     b.HasOne("BidingManagementSystem.Domain.Models.User", "Evaluator")
                         .WithMany("Evaluations")
-                        .HasForeignKey("EvaluatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EvaluatorId");
 
                     b.Navigation("Bid");
 

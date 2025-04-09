@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BidingManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250408164731_initial")]
+    [Migration("20250409010805_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -149,7 +149,6 @@ namespace BidingManagementSystem.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EvaluatorId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("Score")
@@ -497,9 +496,7 @@ namespace BidingManagementSystem.Infrastructure.Migrations
 
                     b.HasOne("BidingManagementSystem.Domain.Models.User", "Evaluator")
                         .WithMany("Evaluations")
-                        .HasForeignKey("EvaluatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EvaluatorId");
 
                     b.Navigation("Bid");
 

@@ -224,7 +224,7 @@ namespace BidingManagementSystem.Infrastructure.Migrations
                     Criteria = table.Column<int>(type: "int", nullable: false),
                     BidId = table.Column<int>(type: "int", nullable: false),
                     TenderId = table.Column<int>(type: "int", nullable: false),
-                    EvaluatorId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    EvaluatorId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -239,8 +239,7 @@ namespace BidingManagementSystem.Infrastructure.Migrations
                         name: "FK_Evaluations_Users_EvaluatorId",
                         column: x => x.EvaluatorId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
